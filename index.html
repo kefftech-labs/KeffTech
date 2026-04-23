@@ -2,95 +2,35 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>KeffTech</title>
-  <link rel="stylesheet" href="style.css">
+  <title>ViArtificial Labs - KeffTech</title>
+  <style>
+    /* LE GRIMOIRE DES STYLES (CSS) */
+    body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f0f0f; color: white; }
+    .header { background: #111; padding: 15px 0; border-bottom: 2px solid #00ff99; }
+    .container { width: 90%; margin: auto; display: flex; justify-content: space-between; align-items: center; }
+    .logo { height: 45px; }
+    nav a { color: white; margin-left: 20px; text-decoration: none; opacity: 0.7; transition: 0.3s; }
+    nav a:hover { opacity: 1; color: #00ff99; }
+
+    .hero { height: 60vh; display: flex; align-items: center; justify-content: center; text-align: center; background: linear-gradient(135deg, #1a1a1a, #000); }
+    .hero-content h1 { font-size: 3em; margin-bottom: 10px; color: #00ff99; }
+    
+    .search-box { margin: 30px 0; }
+    .search-box input { padding: 15px; width: 300px; border: none; border-radius: 5px 0 0 5px; font-size: 16px; }
+    .search-box button { padding: 15px 25px; border: none; background: #00ff99; cursor: pointer; font-weight: bold; border-radius: 0 5px 5px 0; }
+
+    #results { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; padding: 40px; }
+    .card { background: #1a1a1a; padding: 15px; border-radius: 10px; border: 1px solid #333; text-align: center; }
+    .card img { width: 100%; border-radius: 5px; }
+    .card h3 { font-size: 1.1em; margin: 10px 0; }
+    .card button { background: #0099ff; color: white; border: none; padding: 10px; width: 100%; cursor: pointer; border-radius: 5px; }
+  </style>
 </head>
 <body>
 
 <header class="header">
   <div class="container">
     <img src="https://raw.githubusercontent.com/kefftech-labs/KeffTech-/f0ce68cd07dca25dab22f26cf2cc364b638dbff7/00B22785-4743-4AF3-AB30-C1BF085C1064.png" class="logo">
-    <nav>
-      <a href="#">Produits</a>
-      <a href="#">Comment ça marche</a>
-      <a href="#">Connexion</a>
-    </nav>
-
-
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #0f0f0f;
-  color: white;
-}
-
-/* HEADER */
-.header {
-  background: #111;
-  padding: 15px 0;
-}
-
-.container {
-  width: 90%;
-  margin: auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.logo {
-  height: 40px;
-}
-
-nav a {
-  color: white;
-  margin-left: 20px;
-  text-decoration: none;
-  opacity: 0.7;
-}
-
-nav a:hover {
-  opacity: 1;
-}
-
-/* HERO */
-.hero {
-  height: 90vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  background: linear-gradient(135deg, #1a1a1a, #000);
-}
-
-.hero-content h1 {
-  font-size: 3em;
-  margin-bottom: 10px;
-}
-
-.hero-content p {
-  opacity: 0.7;
-  margin-bottom: 20px;
-}
-
-.hero button {
-  padding: 15px 30px;
-  border: none;
-  background: #00ff99;
-  color: black;
-  font-weight: bold;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-.hero button:hover {
-  background: #00cc77;
-}
-
-<header class="header">
-  <div class="container">
-    <img src="https://raw.githubusercontent.com/kefftech-labs/KeffTech-/f0ce68cd07dca25dab22f26cf2cc364b638dbff7/00B22785-4743-4AF3-AB30-C1BF085C1064.png" class="logo">
-
     <nav>
       <a href="#">Trocks & Services</a>
       <a href="#">Vendre</a>
@@ -101,145 +41,58 @@ nav a:hover {
 
 <section class="hero">
   <div class="hero-content">
-
-    <h1>Acheter & vendre intelligemment</h1>
-
-    <!-- BARRE DE RECHERCHE -->
+    <h1>Acheter & Vendre intelligemment</h1>
+    <p>La puissance du Pawaw au service de vos deals.</p>
     <div class="search-box">
-      <input type="text" placeholder="Rechercher un produit...">
-      <button>Rechercher</button>
+      <input type="text" id="userInput" placeholder="Rechercher un produit..." onkeyup="rechercherDansSupabase()">
+      <button onclick="rechercherDansSupabase()">Rechercher</button>
     </div>
-
-    <!-- CTA PRINCIPAL -->
-    <div class="cta-buttons">
-      <button class="buy">Acheter</button>
-      <button class="sell">Vendre</button>
-    </div>
-
-.search-box {
-  margin: 20px 0;
-}
-
-.search-box input {
-  padding: 12px;
-  width: 250px;
-  border: none;
-  border-radius: 5px 0 0 5px;
-}
-
-.search-box button {
-  padding: 12px;
-  border: none;
-  background: #00ff99;
-  cursor: pointer;
-}
-
-.cta-buttons {
-  margin-top: 20px;
-}
-
-.cta-buttons button {
-  padding: 15px 25px;
-  margin: 10px;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.buy {
-  background: #00ff99;
-}
-
-.sell {
-  background: #0099ff;
-  color: white;
-}
-
-
+  </div>
 </section>
-  </div>
-</header>
 
-
-<section class="hero">
-  <div class="hero-content">
-    <h1>Trouve. Clique. Gagne.</h1>
-    <p>Le bot qui trouve les meilleurs deals pendant que tu respires.</p>
-    <button>Tester maintenant</button>
+<div id="results">
   </div>
 
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const sources = [
-  {
-    nom: "AliExpress",
-    produits: [
-      { titre: "Lampe LED RGB", prix: 12, lien: "#", image: "https://via.placeholder.com/100" },
-      { titre: "Casque Bluetooth", prix: 25, lien: "#", image: "https://via.placeholder.com/100" }
-    ]
-  },
-  {
-    nom: "IKEA",
-    produits: [
-      { titre: "Chaise design", prix: 60, lien: "#", image: "https://via.placeholder.com/100" }
-    ]
-  },
-  {
-    nom: "Temu",
-    produits: [
-      { titre: "Gadget cuisine", prix: 8, lien: "#", image: "https://via.placeholder.com/100" }
-    ]
-  }
-];
+  // Connexion au Bastion de Singapour
+  const SUPABASE_URL = 'https://qgtuttbyoarkdlngwbop.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_dFHgAeZVKn4TlmhYjlPkcw_wM1nPOrv'; // Ta clé est là !
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-function rechercher() {
-  const input = document.querySelector("input").value.toLowerCase();
-  let resultats = [];
+  async function rechercherDansSupabase() {
+    const query = document.getElementById("userInput").value;
+    const zone = document.getElementById("results");
 
-  sources.forEach(source => {
-    source.produits.forEach(p => {
-      if (p.titre.toLowerCase().includes(input)) {
-        resultats.push({
-          ...p,
-          source: source.nom
-        });
-      }
+    // Si on cherche rien, on vide
+    if (!query) { zone.innerHTML = ""; return; }
+
+    // APPEL À LA BASE DE DONNÉES (Au lieu de la liste statique de ChatGPT)
+    const { data: produits, error } = await supabaseClient
+      .from('produits') // Le nom de ta table sur Supabase
+      .select('*')
+      .ilike('titre', `%${query}%`); // Recherche intelligente
+
+    if (error) {
+      console.error("Erreur de liaison :", error.message);
+      return;
+    }
+
+    // AFFICHAGE
+    zone.innerHTML = "";
+    produits.forEach(p => {
+      zone.innerHTML += `
+        <div class="card">
+          <img src="${p.image_url || 'https://via.placeholder.com/150'}">
+          <h3>${p.titre}</h3>
+          <p>${p.prix} €</p>
+          <button onclick="window.open('${p.lien_affilie}', '_blank')">Voir le Deal</button>
+        </div>
+      `;
     });
-  });
-
-  afficher(resultats);
-}
-
-function afficher(produits) {
-  const zone = document.getElementById("results");
-  zone.innerHTML = "";
-
-  produits.forEach(p => {
-    const prixFinal = (p.prix * 1.15).toFixed(2);
-
-    zone.innerHTML += `
-      <div class="card">
-        <img src="${p.image}">
-        <h3>${p.titre}</h3>
-        <p>${p.source}</p>
-        <button onclick="acheter('${p.lien}')">
-          Acheter - $${prixFinal}
-        </button>
-      </div>
-    `;
-  });
-}
-
-function acheter(lien) {
-  console.log("Redirection affiliée vers :", lien);
-  window.open(lien, "_blank");
-}
+  }
 </script>
 
-<input type="text" placeholder="Rechercher..." onkeyup="rechercher()">
-<div id="results">
-</div>
-
-</section>
 </body>
 </html>
+

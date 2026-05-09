@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KeffTeckLabs - Hub Multiplateforme avec ViA Chatbot</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://www.paypal.com/sdk/js?client-id=BAA5x3TYxAr5iTeOmY8i0WPS-nNa2OA-zsmoAZi_hdxlF58YTDsKv4Izzg1VOx_bqpF57xQONFNN7x3aQU&components=hosted-buttons&disable-funding=venmo&currency=ILS"></script>
     <style>
         /* 🌌 VARIABLES & THÈME */
         :root {
@@ -473,6 +474,34 @@
             box-shadow: 0 0 20px rgba(255, 204, 0, 0.5);
         }
 
+        /* PAYPAL STYLING */
+        #paypal-container-8DNT48EV7KYTW {
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .paypal-section {
+            background: rgba(251, 191, 36, 0.05);
+            border: 2px solid var(--or);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .paypal-section h3 {
+            color: var(--or);
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(255, 204, 0, 0.3);
+        }
+
+        .paypal-section p {
+            color: #d0d0d0;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+
         /* RESPONSIVE */
         @media (max-width: 768px) {
             .sidebar { display: none; }
@@ -481,6 +510,7 @@
             nav.top-nav { left: 0; }
             .via-chatbot { width: 100%; height: 500px; bottom: 0; right: 0; border-radius: 20px 20px 0 0; }
             .platform-container { padding: 20px; margin-top: 100px; }
+            .paypal-section { padding: 20px; }
         }
     </style>
 </head>
@@ -536,7 +566,15 @@
                     <span>ROI : INVESTIR DANS LA RÉALITÉ</span>
                 </div>
                 <p>Le full article dout dans la réalité commee <strong>Shemoel Hai</strong>, Shemoel Hai au Vent Blanc, les thème de Tikoun Olam matériel, <strong>Smartwear</strong>, <strong>Hybride volant</strong>, Tikoun Olam matériel et viand crèmeanies parte c'halant au peuple osonnant en <strong>Hybride volant peuple</strong>.</p>
-                <button class="roi-button">📋 FAIRE UN DON / INVESTIR</button>
+                
+                <!-- 💳 PAYPAL DONATION BUTTON -->
+                <div class="paypal-section">
+                    <h3>💳 Soutenez KeffTeckLabs - ROI 250%</h3>
+                    <p>Investissez dans la Cité Évo et la libération du Vivant</p>
+                    <div id="paypal-container-8DNT48EV7KYTW"></div>
+                </div>
+
+                <button class="roi-button" style="margin-top: 30px;">📋 Plus d'Options</button>
             </div>
 
             <div style="margin-top: 40px;">
@@ -840,10 +878,17 @@
             osc.stop(audioCtx.currentTime + 0.2);
         }
 
-        // Initialize
+        // 💳 PAYPAL RENDERING
         window.addEventListener('load', () => {
             console.log('🌀 KeffTeckLabs SPA + ViA Chatbot loaded successfully!');
             console.log('✨ Welcome to the Multiplatform Hub');
+            
+            // Render PayPal button
+            if (window.paypal && window.paypal.HostedButtons) {
+                paypal.HostedButtons({
+                    hostedButtonId: "8DNT48EV7KYTW",
+                }).render("#paypal-container-8DNT48EV7KYTW");
+            }
         });
     </script>
 </body>

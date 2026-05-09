@@ -6,117 +6,61 @@
     <title>KeffTeckLabs - Hub Multiplateforme</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        /* 🌌 GRIMOIRE DE STYLE : SKELETON GLASS & NEON GOR */
-        :root {
-            --noir-profond: #050507;
-            --gris-verre: rgba(255, 255, 255, 0.03);
-            --keff-neon: #00ff99; /* Vent Blanc */
-            --via-neon: #0099ff;  /* OS Core */
-            --gor-neon: #ff0055;  /* Social Friction */
-            --transition-speed: 0.5s;
-        }
+:root {
+    --noir: #050507;
+    --keff-neon: #00ff99; /* Vent Blanc */
+    --via-neon: #0099ff;  /* OS Core */
+    --or-royal: #ffcc00;  /* ROI 👑 */
+    --transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { background-color: var(--noir-profond); color: white; overflow: hidden; height: 100vh; }
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+body { background-color: var(--noir); color: white; overflow: hidden; height: 100vh; }
 
-        /* 🧩 STRUCTURE GLOBALE */
-        header {
-            padding: 20px;
-            background: rgba(10, 10, 12, 0.8);
-            backdrop-filter: blur(15px);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            display: flex; justify-content: space-between; align-items: center;
-            position: fixed; top: 0; width: 100%; z-index: 100;
-        }
-
-        .logo-hub { height: 40px; filter: drop-shadow(0 0 5px var(--keff-neon)); cursor: pointer; }
-
-        #wallet-global {
-            background: var(--gris-verre);
-            border: 1px solid var(--keff-neon);
-            padding: 8px 15px; border-radius: 20px;
-            font-weight: bold; color: var(--keff-neon);
-        }
-
-        /* 🎛️ NAVIGATION BAR (LES BOUTONS MAGIQUES) */
-        nav {
-            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-            display: flex; gap: 10px; background: rgba(255,255,255,0.05);
-            padding: 10px; border-radius: 50px; backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.1); z-index: 100;
-        }
-
-        .nav-btn {
-            background: none; border: none; color: white; padding: 10px 15px;
-            border-radius: 25px; cursor: pointer; transition: 0.3s;
-            font-size: 0.8rem; font-weight: bold; text-transform: uppercase;
-        }
-
-        .nav-btn:hover { background: rgba(255,255,255,0.1); }
-        .nav-btn.active { background: var(--keff-neon); color: black; }
-
-        /* 🖼️ SECTIONS (LES PLATEFORMES) */
-        .platform-container {
-            width: 100vw; height: 100vh;
-            padding-top: 100px; padding-bottom: 100px;
-            position: absolute; top: 0; left: 0;
-            display: none; opacity: 0; transform: translateY(20px);
-            transition: all var(--transition-speed) ease-in-out;
-            overflow-y: auto;
-        }
-
-        .platform-container.active-view { display: block; opacity: 1; transform: translateY(0); }
-
-        .glass-card {
-            background: var(--gris-verre); border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 20px; padding: 30px; width: 90%; max-width: 800px;
-            margin: 20px auto; backdrop-filter: blur(5px);
-        }
-
-        h1 { color: var(--keff-neon); margin-bottom: 20px; font-size: 2rem; }
-        .accent-via { color: var(--via-neon); }
-        .accent-gor { color: var(--gor-neon); }
-
-        /* 🕹️ GEEKO NERD SPECIFIC */
-        .social-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
-        .emoji-btn { background: rgba(255,255,255,0.05); border: none; padding: 5px; border-radius: 5px; cursor: pointer; }
-/* 🏆 COUVERTURE & TEXTE ROI */
+/* 🖼️ COUVERTURE LOGO GÉANTE */
 .hero-cover {
-    width: 100%;
-    height: 60vh;
+    width: 100%; height: 45vh;
     background: url('https://raw.githubusercontent.com/kefftech-labs/KeffTech-/f0ce68cd07dca25dab22f26cf2cc364b638dbff7/00B22785-4743-4AF3-AB30-C1BF085C1064.png') no-repeat center center;
     background-size: contain;
-    margin-top: 20px;
     filter: drop-shadow(0 0 20px var(--keff-neon));
-    animation: auraGold 5s infinite alternate;
+    animation: auraGold 4s infinite alternate;
 }
-
-@keyframes auraGold {
-    0% { filter: drop-shadow(0 0 10px var(--keff-neon)); }
-    100% { filter: drop-shadow(0 0 40px #ffcc00); }
+@keyframes auraGold { 
+    0% { filter: drop-shadow(0 0 10px var(--keff-neon)); transform: scale(1); } 
+    100% { filter: drop-shadow(0 0 40px var(--or-royal)); transform: scale(1.02); } 
 }
-
-.text-gold { color: #ffcc00; text-shadow: 0 0 10px rgba(255, 204, 0, 0.5); font-weight: bold; }
-.text-keff { color: var(--keff-neon); }
 
 /* 🎟️ MULTIPASS CARDS */
-.pass-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 15px; margin-top: 30px;
+.pass-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-top: 20px; }
+.pass-card { 
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); 
+    border-radius: 15px; padding: 15px; text-align: center; transition: var(--transition);
 }
+.pass-card:hover { border-color: var(--or-royal); transform: translateY(-5px); }
+.pro { border: 2px solid var(--or-royal); background: rgba(255, 204, 0, 0.05); }
 
-.pass-card {
-    padding: 20px;
-    border: 2px solid rgba(255,255,255,0.1);
-    text-align: center;
-    transition: 0.3s;
+/* 🎛️ NAVIGATION MAGIQUE (BASSE) */
+nav {
+    position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 8px; background: rgba(255,255,255,0.05);
+    padding: 10px; border-radius: 50px; backdrop-filter: blur(15px);
+    border: 1px solid rgba(255,255,255,0.1); z-index: 1000; width: 95%; max-width: 600px;
 }
+.nav-btn {
+    background: none; border: none; color: white; padding: 10px;
+    border-radius: 25px; cursor: pointer; transition: 0.3s; font-size: 0.7rem; font-weight: bold;
+}
+.nav-btn.active { background: var(--keff-neon); color: black; }
 
-.pass-card:hover { border-color: var(--keff-neon); transform: translateY(-5px); background: rgba(0,255,153,0.05); }
-.pass-pro { border-color: #ffcc00; background: rgba(255, 204, 0, 0.05) !important; }
+/* 📦 CONTAINERS */
+.platform-container {
+    width: 100vw; height: 100vh; padding: 70px 20px 100px 20px;
+    position: absolute; top: 0; left: 0; display: none; opacity: 0;
+    transition: var(--transition); overflow-y: auto;
+}
+.active-view { display: block; opacity: 1; }
+</style>
 
-    </style>
 </head>
 
     <nav>

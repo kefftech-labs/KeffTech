@@ -80,6 +80,41 @@
         /* 🕹️ GEEKO NERD SPECIFIC */
         .social-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
         .emoji-btn { background: rgba(255,255,255,0.05); border: none; padding: 5px; border-radius: 5px; cursor: pointer; }
+/* 🏆 COUVERTURE & TEXTE ROI */
+.hero-cover {
+    width: 100%;
+    height: 60vh;
+    background: url('https://raw.githubusercontent.com/kefftech-labs/KeffTech-/f0ce68cd07dca25dab22f26cf2cc364b638dbff7/00B22785-4743-4AF3-AB30-C1BF085C1064.png') no-repeat center center;
+    background-size: contain;
+    margin-top: 20px;
+    filter: drop-shadow(0 0 20px var(--keff-neon));
+    animation: auraGold 5s infinite alternate;
+}
+
+@keyframes auraGold {
+    0% { filter: drop-shadow(0 0 10px var(--keff-neon)); }
+    100% { filter: drop-shadow(0 0 40px #ffcc00); }
+}
+
+.text-gold { color: #ffcc00; text-shadow: 0 0 10px rgba(255, 204, 0, 0.5); font-weight: bold; }
+.text-keff { color: var(--keff-neon); }
+
+/* 🎟️ MULTIPASS CARDS */
+.pass-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px; margin-top: 30px;
+}
+
+.pass-card {
+    padding: 20px;
+    border: 2px solid rgba(255,255,255,0.1);
+    text-align: center;
+    transition: 0.3s;
+}
+
+.pass-card:hover { border-color: var(--keff-neon); transform: translateY(-5px); background: rgba(0,255,153,0.05); }
+.pass-pro { border-color: #ffcc00; background: rgba(255, 204, 0, 0.05) !important; }
 
     </style>
 </head>
@@ -358,7 +393,72 @@
     // Appel initial au chargement
     console.log("Système GeeksORnerds stabilisé à 1 MW. Prêt pour le 28.");
 
+    <div id="home" class="platform-container active-view">
+    <div class="hero-cover"></div>
+
+    <div class="glass-card" style="text-align:center;">
+        <h1 class="text-gold">👑 LE PACTE DE L'OR : ROI SUBATOMIQUE</h1>
+        <article style="text-align:left; line-height:1.6; font-size:1.1rem;">
+            <p>Architecte <span class="text-gold">Shemoel Hai</span> présente : L'investissement dans la matière pour libérer l'esprit. 
+            Investir dans <strong>GoleMotor</strong>, ce n'est pas acheter une action, c'est condenser du <strong>Vent Blanc</strong>.</p>
+            <br>
+            <p><strong class="text-keff">Retour sur Investissement (ROI) :</strong> Chaque shekel injecté dans nos prototypes (Smartwear, Hybride) 
+            génère un mérite qui se transforme en or pur pour la nation. Nous ne distribuons pas des dividendes, nous distribuons de la 
+            <strong>Puissance de Vie (חי)</strong>.</p>
+        </article>
+        
+        <button class="deal-btn" style="margin-top:20px; background:#ffcc00; color:black;">📜 LIRE LE MANIFESTE DES SOLIDES</button>
+    </div>
+
+    <div class="glass-card">
+        <h2 class="text-keff">🎟️ ABONNEMENTS MULTIPASS</h2>
+        <div class="pass-grid">
+            <div class="glass-card pass-card">
+                <h3>Multipass</h3>
+                <p class="text-keff">10€ / mois</p>
+                <ul style="font-size:0.8rem; list-style:none; margin-top:10px; opacity:0.8;">
+                    <li>✓ Accès BFF Basic</li>
+                    <li>✓ Feedback +1/-1</li>
+                    <li>✓ Bonusinos x1</li>
+                </ul>
+                <button class="nav-btn" style="width:100%; margin-top:15px; border:1px solid var(--keff-neon)">ACTIVER</button>
+            </div>
+            <div class="glass-card pass-card">
+                <h3>Multipass ++</h3>
+                <p class="text-keff">25€ / mois</p>
+                <ul style="font-size:0.8rem; list-style:none; margin-top:10px; opacity:0.8;">
+                    <li>✓ Générateur Vidéo</li>
+                    <li>✓ Accès Arène GOR</li>
+                    <li>✓ Bonusinos x5</li>
+                </ul>
+                <button class="nav-btn" style="width:100%; margin-top:15px; background:var(--keff-neon); color:black;">BOOSTER</button>
+            </div>
+            <div class="glass-card pass-card pass-pro">
+                <h3 class="text-gold">Multipass ++ PRO</h3>
+                <p class="text-gold">50€ / mois</p>
+                <ul style="font-size:0.8rem; list-style:none; margin-top:10px; opacity:0.8;">
+                    <li>✓ IA Ultraphysicien</li>
+                    <li>✓ Plans 3D Bruts</li>
+                    <li>✓ Gouvernance ROI 👑</li>
+                </ul>
+                <button class="deal-btn" style="width:100%; margin-top:15px; background:#ffcc00; color:black;">DEVENIR SOLIDE</button>
+            </div>
+        </div>
+    </div>
     
+    <div class="glass-card" style="text-align:center;">
+        <p style="margin-bottom:10px; opacity:0.6;">🌐 Select Frequency / Langue / שפה</p>
+        <select id="langSwitcher" class="nav-btn" style="border:1px solid rgba(255,255,255,0.2); width:200px;">
+            <option value="fr">Français</option>
+            <option value="he">עברית (Hebrew)</option>
+            <option value="en">English</option>
+            <option value="jp">日本語 (Japanese)</option>
+            <option value="es">Español</option>
+            <option value="ar">العربية</option>
+        </select>
+    </div>
+</div>
+
 </script>
 
 </body>

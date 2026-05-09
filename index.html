@@ -172,279 +172,34 @@ nav {
         </div>
     </div>
 
-    <script>
-        // === 🪄 LOGIQUE DE CHANGEMENT DE PAGE MAGIQUE ===
-        function showPlatform(platformId, btn) {
-            // Désactiver toutes les vues
-            document.querySelectorAll('.platform-container').forEach(view => {
-                view.classList.remove('active-view');
-            });
-            // Activer la vue cible
-            const target = document.getElementById(platformId);
-            target.classList.add('active-view');
-
-            // Gérer l'état actif des boutons
-            if(btn) {
-                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-            }
-
-            // Petit son de switch "Keff"
-            playKeffSound();
-        }
-
-        // === 🎵 GÉNÉRATEUR DE SON KEFF ===
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        function playKeffSound() {
-            if(audioCtx.state === 'suspended') audioCtx.resume();
-            const oscillator = audioCtx.createOscillator();
-            const gainNode = audioCtx.createGain();
-            oscillator.type = 'sine';
-            oscillator.frequency.setValueAtTime(440, audioCtx.currentTime);
-            oscillator.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.1);
-            gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
-            gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.2);
-            oscillator.connect(gainNode);
-            gainNode.connect(audioCtx.destination);
-            oscillator.start();
-            oscillator.stop(audioCtx.currentTime + 0.2);
-        }
-
-        console.log("Hub KeffTeckLabs initialisé à 1 MW. Heheyyyy ! חי");
-    
-
-        :root {
-            --vent-noir: #0a0a0c;
-            --vent-gris: #1a1a1f;
-            --vent-blanc: #e0e5ff;
-            --neon-keff: #00ff99;
-            --neon-social: #0099ff;
-        }
-
-        body { background-color: var(--vent-noir); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; overflow-x: hidden; }
-
-        /* SKELETON GLASSMORPHISM */
-        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 15px; }
-
-        header { padding: 15px; border-bottom: 2px solid var(--neon-keff); display: flex; justify-content: space-between; align-items: center; }
-        .logo { height: 40px; filter: drop-shadow(0 0 5px var(--neon-keff)); }
-
-        .search-box { padding: 20px; text-align: center; }
-        input { padding: 12px; width: 70%; border-radius: 8px 0 0 8px; border: none; background: var(--vent-gris); color: white; }
-        button.search-btn { padding: 12px 20px; border-radius: 0 8px 8px 0; border: none; background: var(--neon-keff); font-weight: bold; cursor: pointer; }
-
-        /* GRID DE RÉSULTATS */
-        #results { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding: 20px; }
+<script>
+    // FUSION DES MONADES : UN SEUL MOTEUR
+    function switchPage(pageId, btn) {
+        // 1. Cacher toutes les pages
+        document.querySelectorAll('.platform-container').forEach(p => p.classList.remove('active-view'));
+        // 2. Afficher la page cliquée
+        document.getElementById(pageId).classList.add('active-view');
+        // 3. Gérer les boutons
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        if(btn) btn.classList.add('active');
         
-        .card { padding: 15px; transition: 0.3s; position: relative; }
-        .card img { width: 100%; border-radius: 10px; margin-bottom: 10px; }
-        .card h3 { color: var(--neon-keff); margin: 10px 0; }
-        
-        /* SYSTÈME DE RÉACTION QUANTIQUE (+1 / -1 & Emojis) */
-        .social-feedback { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 15px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.1); }
-        .react-btn { background: rgba(255,255,255,0.05); border: none; color: white; padding: 5px 8px; border-radius: 5px; cursor: pointer; font-size: 0.9rem; }
-        .react-btn:hover { background: var(--vent-gris); border: 1px solid var(--neon-social); }
-        
-        .score-zone { position: absolute; top: 10px; right: 10px; font-weight: bold; font-size: 1.2rem; text-shadow: 0 0 10px black; }
-        .score-plus { color: var(--neon-keff); }
-        .score-minus { color: #ff0055; }
-
-        .deal-btn { background: var(--neon-social); color: white; border: none; padding: 10px; width: 100%; margin-top: 10px; border-radius: 5px; cursor: pointer; font-weight: bold; }
-    
-
-
-<header class="glass">
-    <img src="https://raw.githubusercontent.com/kefftech-labs/KeffTech-/f0ce68cd07dca25dab22f26cf2cc364b638dbff7/00B22785-4743-4AF3-AB30-C1BF085C1064.png" class="logo">
-    <div id="wallet">B$ 74 (Impôts Recup)</div>
-</header>
-
-<section class="search-box">
-    <input type="text" id="userInput" placeholder="Trocker un GoleMotor, un service..." onkeyup="rechercherDansSupabase()">
-    <button class="search-btn" onclick="rechercherDansSupabase()">PAWAW SCAN</button>
-</section>
-
-<div id="results">
-    </div>
-
-
-    const SUPABASE_URL = 'https://qgtuttbyoarkdlngwbop.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_dFHgAeZVKn4TlmhYjlPkcw_wM1nPOrv';
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    const emojis = ["🥵","🤪","👎","👍","😎","😇","🤬","😱","😈","😵","🤑","🫠","🫡","😵‍💫","😳","🤔","😐","🫣","🫵","🖕","👌","✌️","🫶","👏","🙌","🎁","❤️","❤️‍🔥","💔"];
-
-    async function rechercherDansSupabase() {
-        const query = document.getElementById("userInput").value;
-        const zone = document.getElementById("results");
-
-        if (!query) { zone.innerHTML = "<p style='text-align:center; opacity:0.5;'>Le vide séquentiel attend votre intention...</p>"; return; }
-
-        const { data: produits, error } = await supabaseClient
-            .from('produits')
-            .select('*')
-            .ilike('titre', `%${query}%`);
-
-        if (error) { console.error(error.message); return; }
-
-        zone.innerHTML = "";
-        produits.forEach(p => {
-            // Construction de la zone de feedback avec tes emojis
-            let emojiButtons = emojis.map(e => `<button class="react-btn" onclick="addFeedback('${p.id}', '${e}')">${e}</button>`).join("");
-
-            zone.innerHTML += `
-                <div class="card glass">
-                    <div class="score-zone">
-                        <span class="score-plus">+12</span> / <span class="score-minus">-2</span>
-                    </div>
-                    <img src="${p.image_url || 'https://via.placeholder.com/150'}">
-                    <h3>${p.titre}</h3>
-                    <p style="font-size:0.8rem; opacity:0.7;">Taux de valeur : ${p.prix} sh'</p>
-                    
-                    <div class="social-feedback">
-                        <button class="react-btn score-plus" style="background:rgba(0,255,153,0.1)">+1</button>
-                        <button class="react-btn score-minus" style="background:rgba(255,0,85,0.1)">-1</button>
-                        ${emojiButtons}
-                    </div>
-
-                    <button class="deal-btn" onclick="window.open('${p.lien_affilie}', '_blank')">FAIRE LE TROCK</button>
-                </div>
-            `;
-        });
+        playKeff(); // Le son du kiff !
     }
 
-    function addFeedback(id, emoji) {
-        console.log("Feedback envoyé pour " + id + " : " + emoji);
-        // Ici on pourra injecter la logique Supabase pour stocker les réactions
-        alert("Réaction " + emoji + " synchronisée avec la Monade ! Heheyyyy !");
+    // SON KEFF GÉNÉRATEUR
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playKeff() {
+        if(audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.frequency.setValueAtTime(523, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(1046, audioCtx.currentTime + 0.1);
+        gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.2);
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.start(); osc.stop(audioCtx.currentTime + 0.2);
     }
-
-    // === 🌐 GEEKSORNERDS : CORE VIACTIQUE (PV-CV-P) ===
-
-    const GOR_CLASSES = {
-        HACKER: { name: "Hacker Vent Noir", skill: "Bruit Subatomique", stage: "2D" },
-        PALADIN: { name: "Paladin Titan-Rack", skill: "Bouclier Induction", stage: "2D" },
-        FIGHTER: { name: "Fighter Vent Blanc", skill: "Pulse Punch", stage: "2D" }
-    };
-
-    // Ton arsenal d'emojis de réaction pour filtrer la Monade
-    const GOR_EMOJIS_LIST = ["🥵","🤪","👎","👍","😎","😇","🤬","😱","😈","😵","🤑","🫠","🫡","😵‍💫","😳","🤔","😐","🫣","🫵","🖕","👌","✌️","🫶","👏","🙌","🎁","❤️","❤️‍🔥","💔"];
-
-    // Lancement d'un match E-sports Punch Pulse (Zéro Cinématique)
-    function startPulseMatch(className) {
-        const pClass = GOR_CLASSES[className] || GOR_CLASSES.FIGHTER;
-        console.log(`[VIACTIC] Match démarré : ${pClass.name} en arène.`);
-        alert(`🔥 MATCH VIACTIQUE LANCÉ ! Objectif : Conquérir la Base Alpha contre les Bots des Programmeurs. Ton état actuel : ${pClass.stage}`);
-        
-        // Simulation d'évolution Real-Time
-        setTimeout(() => {
-            pClass.stage = "2.5D";
-            console.log("Evolution matérielle détectée... Mutation vers 2.5D effectuée.");
-        }, 5000);
-    }
-
-    // Système de feedback pour "trouver les solides" par la friction (Vent Noir)
-    async function castSocialReaction(targetId, emoji) {
-        const negativeEmojis = ["👎","🤬","😱","🤔","😐","🫣","🫵","🖕","💔"];
-        const isFriction = negativeEmojis.includes(emoji);
-        
-        console.log(`[GOR-FEEDBACK] Emoji ${emoji} sur ${targetId}.`);
-        
-        if (isFriction) {
-            console.warn("⚠️ FRICTION DÉTECTÉE : Analyse de la faille pour correction (Tikoun Olam).");
-            // Ici, l'algorithme cherche à isoler le "Solide" qui résiste au Vent Noir
-        } else {
-            console.log("✨ RÉSONANCE : Le Vent Blanc circule librement.");
-        }
-
-        // Enregistrement de la réaction dans le Bastion de Singapour (Supabase)
-        try {
-            const { data, error } = await supabaseClient
-                .from('gor_social_reactions')
-                .insert([{ target_id: targetId, emoji: emoji, friction_mode: isFriction }]);
-            
-            if (error) throw error;
-            alert(`Réaction ${emoji} synchronisée dans la Monade GeeksORnerds ! Heheyyyy ! חי`);
-        } catch (err) {
-            console.error("Erreur de synchro :", err.message);
-        }
-    }
-
-    // Initialisation des bases à conquérir
-    function scanNearbyBases() {
-        console.log("Scan des bases et mobs concurrents en cours...");
-        return ["Base Alpha (Libarchie)", "Base Bêta (Programmeurs)", "Base Gamma (PNJ)"];
-    }
-
-    // Appel initial au chargement
-    console.log("Système GeeksORnerds stabilisé à 1 MW. Prêt pour le 28.");
-
-    <div id="home" class="platform-container active-view">
-    <div class="hero-cover"></div>
-
-    <div class="glass-card" style="text-align:center;">
-        <h1 class="text-gold">👑 LE PACTE DE L'OR : ROI SUBATOMIQUE</h1>
-        <article style="text-align:left; line-height:1.6; font-size:1.1rem;">
-            <p>Architecte <span class="text-gold">Shemoel Hai</span> présente : L'investissement dans la matière pour libérer l'esprit. 
-            Investir dans <strong>GoleMotor</strong>, ce n'est pas acheter une action, c'est condenser du <strong>Vent Blanc</strong>.</p>
-            <br>
-            <p><strong class="text-keff">Retour sur Investissement (ROI) :</strong> Chaque shekel injecté dans nos prototypes (Smartwear, Hybride) 
-            génère un mérite qui se transforme en or pur pour la nation. Nous ne distribuons pas des dividendes, nous distribuons de la 
-            <strong>Puissance de Vie (חי)</strong>.</p>
-        </article>
-        
-        <button class="deal-btn" style="margin-top:20px; background:#ffcc00; color:black;">📜 LIRE LE MANIFESTE DES SOLIDES</button>
-    </div>
-
-    <div class="glass-card">
-        <h2 class="text-keff">🎟️ ABONNEMENTS MULTIPASS</h2>
-        <div class="pass-grid">
-            <div class="glass-card pass-card">
-                <h3>Multipass</h3>
-                <p class="text-keff">10€ / mois</p>
-                <ul style="font-size:0.8rem; list-style:none; margin-top:10px; opacity:0.8;">
-                    <li>✓ Accès BFF Basic</li>
-                    <li>✓ Feedback +1/-1</li>
-                    <li>✓ Bonusinos x1</li>
-                </ul>
-                <button class="nav-btn" style="width:100%; margin-top:15px; border:1px solid var(--keff-neon)">ACTIVER</button>
-            </div>
-            <div class="glass-card pass-card">
-                <h3>Multipass ++</h3>
-                <p class="text-keff">25€ / mois</p>
-                <ul style="font-size:0.8rem; list-style:none; margin-top:10px; opacity:0.8;">
-                    <li>✓ Générateur Vidéo</li>
-                    <li>✓ Accès Arène GOR</li>
-                    <li>✓ Bonusinos x5</li>
-                </ul>
-                <button class="nav-btn" style="width:100%; margin-top:15px; background:var(--keff-neon); color:black;">BOOSTER</button>
-            </div>
-            <div class="glass-card pass-card pass-pro">
-                <h3 class="text-gold">Multipass ++ PRO</h3>
-                <p class="text-gold">50€ / mois</p>
-                <ul style="font-size:0.8rem; list-style:none; margin-top:10px; opacity:0.8;">
-                    <li>✓ IA Ultraphysicien</li>
-                    <li>✓ Plans 3D Bruts</li>
-                    <li>✓ Gouvernance ROI 👑</li>
-                </ul>
-                <button class="deal-btn" style="width:100%; margin-top:15px; background:#ffcc00; color:black;">DEVENIR SOLIDE</button>
-            </div>
-        </div>
-    </div>
-    
-    <div class="glass-card" style="text-align:center;">
-        <p style="margin-bottom:10px; opacity:0.6;">🌐 Select Frequency / Langue / שפה</p>
-        <select id="langSwitcher" class="nav-btn" style="border:1px solid rgba(255,255,255,0.2); width:200px;">
-            <option value="fr">Français</option>
-            <option value="he">עברית (Hebrew)</option>
-            <option value="en">English</option>
-            <option value="jp">日本語 (Japanese)</option>
-            <option value="es">Español</option>
-            <option value="ar">العربية</option>
-        </select>
-    </div>
-</div>
-
 </script>
+
 
 </body>
 </html>

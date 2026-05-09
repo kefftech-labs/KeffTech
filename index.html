@@ -111,6 +111,68 @@
         // Ici on pourra injecter la logique Supabase pour stocker les réactions
         alert("Réaction " + emoji + " synchronisée avec la Monade ! Heheyyyy !");
     }
+
+    // === 🌐 GEEKSORNERDS : CORE VIACTIQUE (PV-CV-P) ===
+
+    const GOR_CLASSES = {
+        HACKER: { name: "Hacker Vent Noir", skill: "Bruit Subatomique", stage: "2D" },
+        PALADIN: { name: "Paladin Titan-Rack", skill: "Bouclier Induction", stage: "2D" },
+        FIGHTER: { name: "Fighter Vent Blanc", skill: "Pulse Punch", stage: "2D" }
+    };
+
+    // Ton arsenal d'emojis de réaction pour filtrer la Monade
+    const GOR_EMOJIS_LIST = ["🥵","🤪","👎","👍","😎","😇","🤬","😱","😈","😵","🤑","🫠","🫡","😵‍💫","😳","🤔","😐","🫣","🫵","🖕","👌","✌️","🫶","👏","🙌","🎁","❤️","❤️‍🔥","💔"];
+
+    // Lancement d'un match E-sports Punch Pulse (Zéro Cinématique)
+    function startPulseMatch(className) {
+        const pClass = GOR_CLASSES[className] || GOR_CLASSES.FIGHTER;
+        console.log(`[VIACTIC] Match démarré : ${pClass.name} en arène.`);
+        alert(`🔥 MATCH VIACTIQUE LANCÉ ! Objectif : Conquérir la Base Alpha contre les Bots des Programmeurs. Ton état actuel : ${pClass.stage}`);
+        
+        // Simulation d'évolution Real-Time
+        setTimeout(() => {
+            pClass.stage = "2.5D";
+            console.log("Evolution matérielle détectée... Mutation vers 2.5D effectuée.");
+        }, 5000);
+    }
+
+    // Système de feedback pour "trouver les solides" par la friction (Vent Noir)
+    async function castSocialReaction(targetId, emoji) {
+        const negativeEmojis = ["👎","🤬","😱","🤔","😐","🫣","🫵","🖕","💔"];
+        const isFriction = negativeEmojis.includes(emoji);
+        
+        console.log(`[GOR-FEEDBACK] Emoji ${emoji} sur ${targetId}.`);
+        
+        if (isFriction) {
+            console.warn("⚠️ FRICTION DÉTECTÉE : Analyse de la faille pour correction (Tikoun Olam).");
+            // Ici, l'algorithme cherche à isoler le "Solide" qui résiste au Vent Noir
+        } else {
+            console.log("✨ RÉSONANCE : Le Vent Blanc circule librement.");
+        }
+
+        // Enregistrement de la réaction dans le Bastion de Singapour (Supabase)
+        try {
+            const { data, error } = await supabaseClient
+                .from('gor_social_reactions')
+                .insert([{ target_id: targetId, emoji: emoji, friction_mode: isFriction }]);
+            
+            if (error) throw error;
+            alert(`Réaction ${emoji} synchronisée dans la Monade GeeksORnerds ! Heheyyyy ! חי`);
+        } catch (err) {
+            console.error("Erreur de synchro :", err.message);
+        }
+    }
+
+    // Initialisation des bases à conquérir
+    function scanNearbyBases() {
+        console.log("Scan des bases et mobs concurrents en cours...");
+        return ["Base Alpha (Libarchie)", "Base Bêta (Programmeurs)", "Base Gamma (PNJ)"];
+    }
+
+    // Appel initial au chargement
+    console.log("Système GeeksORnerds stabilisé à 1 MW. Prêt pour le 28.");
+
+    
 </script>
 
 </body>

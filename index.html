@@ -1,98 +1,119 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>ViArtificial Labs - KeffTech</title>
-  <style>
-    /* LE GRIMOIRE DES STYLES (CSS) */
-    body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f0f0f; color: white; }
-    .header { background: #111; padding: 15px 0; border-bottom: 2px solid #00ff99; }
-    .container { width: 90%; margin: auto; display: flex; justify-content: space-between; align-items: center; }
-    .logo { height: 45px; }
-    nav a { color: white; margin-left: 20px; text-decoration: none; opacity: 0.7; transition: 0.3s; }
-    nav a:hover { opacity: 1; color: #00ff99; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>GoleMotor PAW - KeffTech Labs</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            --vent-noir: #0a0a0c;
+            --vent-gris: #1a1a1f;
+            --vent-blanc: #e0e5ff;
+            --neon-keff: #00ff99;
+            --neon-social: #0099ff;
+        }
 
-    .hero { height: 60vh; display: flex; align-items: center; justify-content: center; text-align: center; background: linear-gradient(135deg, #1a1a1a, #000); }
-    .hero-content h1 { font-size: 3em; margin-bottom: 10px; color: #00ff99; }
-    
-    .search-box { margin: 30px 0; }
-    .search-box input { padding: 15px; width: 300px; border: none; border-radius: 5px 0 0 5px; font-size: 16px; }
-    .search-box button { padding: 15px 25px; border: none; background: #00ff99; cursor: pointer; font-weight: bold; border-radius: 0 5px 5px 0; }
+        body { background-color: var(--vent-noir); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; overflow-x: hidden; }
 
-    #results { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; padding: 40px; }
-    .card { background: #1a1a1a; padding: 15px; border-radius: 10px; border: 1px solid #333; text-align: center; }
-    .card img { width: 100%; border-radius: 5px; }
-    .card h3 { font-size: 1.1em; margin: 10px 0; }
-    .card button { background: #0099ff; color: white; border: none; padding: 10px; width: 100%; cursor: pointer; border-radius: 5px; }
-  </style>
+        /* SKELETON GLASSMORPHISM */
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 15px; }
+
+        header { padding: 15px; border-bottom: 2px solid var(--neon-keff); display: flex; justify-content: space-between; align-items: center; }
+        .logo { height: 40px; filter: drop-shadow(0 0 5px var(--neon-keff)); }
+
+        .search-box { padding: 20px; text-align: center; }
+        input { padding: 12px; width: 70%; border-radius: 8px 0 0 8px; border: none; background: var(--vent-gris); color: white; }
+        button.search-btn { padding: 12px 20px; border-radius: 0 8px 8px 0; border: none; background: var(--neon-keff); font-weight: bold; cursor: pointer; }
+
+        /* GRID DE RÉSULTATS */
+        #results { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding: 20px; }
+        
+        .card { padding: 15px; transition: 0.3s; position: relative; }
+        .card img { width: 100%; border-radius: 10px; margin-bottom: 10px; }
+        .card h3 { color: var(--neon-keff); margin: 10px 0; }
+        
+        /* SYSTÈME DE RÉACTION QUANTIQUE (+1 / -1 & Emojis) */
+        .social-feedback { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 15px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.1); }
+        .react-btn { background: rgba(255,255,255,0.05); border: none; color: white; padding: 5px 8px; border-radius: 5px; cursor: pointer; font-size: 0.9rem; }
+        .react-btn:hover { background: var(--vent-gris); border: 1px solid var(--neon-social); }
+        
+        .score-zone { position: absolute; top: 10px; right: 10px; font-weight: bold; font-size: 1.2rem; text-shadow: 0 0 10px black; }
+        .score-plus { color: var(--neon-keff); }
+        .score-minus { color: #ff0055; }
+
+        .deal-btn { background: var(--neon-social); color: white; border: none; padding: 10px; width: 100%; margin-top: 10px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+    </style>
 </head>
 <body>
 
-<header class="header">
-  <div class="container">
+<header class="glass">
     <img src="https://raw.githubusercontent.com/kefftech-labs/KeffTech-/f0ce68cd07dca25dab22f26cf2cc364b638dbff7/00B22785-4743-4AF3-AB30-C1BF085C1064.png" class="logo">
-    <nav>
-      <a href="#">Trocks & Services</a>
-      <a href="#">Vendre</a>
-      <a href="#">Profil</a>
-    </nav>
-  </div>
+    <div id="wallet">B$ 74 (Impôts Recup)</div>
 </header>
 
-<section class="hero">
-  <div class="hero-content">
-    <h1>Acheter & Vendre intelligemment</h1>
-    <p>La puissance du Pawaw au service de vos deals.</p>
-    <div class="search-box">
-      <input type="text" id="userInput" placeholder="Rechercher un produit..." onkeyup="rechercherDansSupabase()">
-      <button onclick="rechercherDansSupabase()">Rechercher</button>
-    </div>
-  </div>
+<section class="search-box">
+    <input type="text" id="userInput" placeholder="Trocker un GoleMotor, un service..." onkeyup="rechercherDansSupabase()">
+    <button class="search-btn" onclick="rechercherDansSupabase()">PAWAW SCAN</button>
 </section>
 
 <div id="results">
-  </div>
+    </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  // Connexion au Bastion de Singapour
-  const SUPABASE_URL = 'https://qgtuttbyoarkdlngwbop.supabase.co';
-  const SUPABASE_ANON_KEY = 'sb_publishable_dFHgAeZVKn4TlmhYjlPkcw_wM1nPOrv'; // Ta clé est là !
-  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const SUPABASE_URL = 'https://qgtuttbyoarkdlngwbop.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_dFHgAeZVKn4TlmhYjlPkcw_wM1nPOrv';
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  async function rechercherDansSupabase() {
-    const query = document.getElementById("userInput").value;
-    const zone = document.getElementById("results");
+    const emojis = ["🥵","🤪","👎","👍","😎","😇","🤬","😱","😈","😵","🤑","🫠","🫡","😵‍💫","😳","🤔","😐","🫣","🫵","🖕","👌","✌️","🫶","👏","🙌","🎁","❤️","❤️‍🔥","💔"];
 
-    // Si on cherche rien, on vide
-    if (!query) { zone.innerHTML = ""; return; }
+    async function rechercherDansSupabase() {
+        const query = document.getElementById("userInput").value;
+        const zone = document.getElementById("results");
 
-    // APPEL À LA BASE DE DONNÉES (Au lieu de la liste statique de ChatGPT)
-    const { data: produits, error } = await supabaseClient
-      .from('produits') // Le nom de ta table sur Supabase
-      .select('*')
-      .ilike('titre', `%${query}%`); // Recherche intelligente
+        if (!query) { zone.innerHTML = "<p style='text-align:center; opacity:0.5;'>Le vide séquentiel attend votre intention...</p>"; return; }
 
-    if (error) {
-      console.error("Erreur de liaison :", error.message);
-      return;
+        const { data: produits, error } = await supabaseClient
+            .from('produits')
+            .select('*')
+            .ilike('titre', `%${query}%`);
+
+        if (error) { console.error(error.message); return; }
+
+        zone.innerHTML = "";
+        produits.forEach(p => {
+            // Construction de la zone de feedback avec tes emojis
+            let emojiButtons = emojis.map(e => `<button class="react-btn" onclick="addFeedback('${p.id}', '${e}')">${e}</button>`).join("");
+
+            zone.innerHTML += `
+                <div class="card glass">
+                    <div class="score-zone">
+                        <span class="score-plus">+12</span> / <span class="score-minus">-2</span>
+                    </div>
+                    <img src="${p.image_url || 'https://via.placeholder.com/150'}">
+                    <h3>${p.titre}</h3>
+                    <p style="font-size:0.8rem; opacity:0.7;">Taux de valeur : ${p.prix} sh'</p>
+                    
+                    <div class="social-feedback">
+                        <button class="react-btn score-plus" style="background:rgba(0,255,153,0.1)">+1</button>
+                        <button class="react-btn score-minus" style="background:rgba(255,0,85,0.1)">-1</button>
+                        ${emojiButtons}
+                    </div>
+
+                    <button class="deal-btn" onclick="window.open('${p.lien_affilie}', '_blank')">FAIRE LE TROCK</button>
+                </div>
+            `;
+        });
     }
 
-    // AFFICHAGE
-    zone.innerHTML = "";
-    produits.forEach(p => {
-      zone.innerHTML += `
-        <div class="card">
-          <img src="${p.image_url || 'https://via.placeholder.com/150'}">
-          <h3>${p.titre}</h3>
-          <p>${p.prix} €</p>
-          <button onclick="window.open('${p.lien_affilie}', '_blank')">Voir le Deal</button>
-        </div>
-      `;
-    });
-  }
+    function addFeedback(id, emoji) {
+        console.log("Feedback envoyé pour " + id + " : " + emoji);
+        // Ici on pourra injecter la logique Supabase pour stocker les réactions
+        alert("Réaction " + emoji + " synchronisée avec la Monade ! Heheyyyy !");
+    }
 </script>
 
 </body>
 </html>
+
 

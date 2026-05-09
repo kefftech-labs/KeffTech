@@ -62,6 +62,49 @@ nav {
 </style>
 
 </head>
+<body>
+    <header style="position:fixed; top:0; width:100%; padding:15px; z-index:1000; display:flex; justify-content:space-between; background:rgba(0,0,0,0.8);">
+    <h2 style="color:var(--keff-neon); font-size:1.2rem;">KEFFTECK LABS</h2>
+    <div id="wallet" style="color:var(--or-royal); font-weight:bold;">B$ 74</div>
+</header>
+
+<nav>
+    <button class="nav-btn active" onclick="switchPage('home', this)">HOME</button>
+    <button class="nav-btn" onclick="switchPage('bonusino', this)">BONUSINO</button>
+    <button class="nav-btn" onclick="switchPage('librarchia', this)">LIBRARCHIA</button>
+    <button class="nav-btn" onclick="switchPage('via', this)">ViA</button>
+    <button class="nav-btn" onclick="switchPage('golemotor', this)">GOLEMOTOR</button>
+</nav>
+
+<div id="home" class="platform-container active-view">
+    <div class="hero-cover"></div>
+    <div style="background:rgba(255,255,255,0.03); padding:25px; border-radius:20px; margin-top:20px;">
+        <h1 style="color:var(--or-royal)">👑 ROI : INVESTIR DANS LA RÉALITÉ</h1>
+        <p style="line-height:1.6; margin-top:15px;">
+            Architecte <strong>Shemoel Hai</strong> : Nous transformons le Vent Blanc en Or. 
+            Investir ici, c'est participer au <strong>Tikoun Olam matériel</strong>. Chaque don finance 
+            le Smartwear et l'Hybride volant pour le peuple.
+        </p>
+    </div>
+
+    <div class="pass-grid">
+        <div class="pass-card"><h3>Multipass</h3><p>10€</p><button class="nav-btn" style="border:1px solid var(--keff-neon); margin-top:10px;">ACTIVER</button></div>
+        <div class="pass-card"><h3>Multipass++</h3><p>25€</p><button class="nav-btn" style="background:var(--keff-neon); color:black; margin-top:10px;">BOOSTER</button></div>
+        <div class="pass-card pro"><h3>Multipass++ PRO</h3><p style="color:var(--or-royal)">50€</p><button class="nav-btn" style="background:var(--or-royal); color:black; margin-top:10px;">👑 GO PRO</button></div>
+    </div>
+
+    <div style="text-align:center; margin-top:30px;">
+        <select class="nav-btn" style="border:1px solid rgba(255,255,255,0.2); width:150px;">
+            <option>🇫🇷 Français</option><option>🇮🇱 עברית</option><option>🇺🇸 English</option><option>🇯🇵 日本語</option>
+        </select>
+    </div>
+</div>
+
+<div id="bonusino" class="platform-container">
+    <h1 style="color:var(--keff-neon)">💰 Matrice Bonusino</h1>
+    <div class="pass-card">Bloc 1 : Scan Radar</div>
+    <div class="pass-card">Bloc 2 : Flux Supabase</div>
+    </div>
 
     <nav>
         <button class="nav-btn active" onclick="showPlatform('bonusino', this)">Bonusino</button>

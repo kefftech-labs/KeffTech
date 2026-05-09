@@ -3,9 +3,200 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GoleMotor PAW - KeffTech Labs</title>
+    <title>KeffTeckLabs - Hub Multiplateforme</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
+        /* 🌌 GRIMOIRE DE STYLE : SKELETON GLASS & NEON GOR */
+        :root {
+            --noir-profond: #050507;
+            --gris-verre: rgba(255, 255, 255, 0.03);
+            --keff-neon: #00ff99; /* Vent Blanc */
+            --via-neon: #0099ff;  /* OS Core */
+            --gor-neon: #ff0055;  /* Social Friction */
+            --transition-speed: 0.5s;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--noir-profond); color: white; overflow: hidden; height: 100vh; }
+
+        /* 🧩 STRUCTURE GLOBALE */
+        header {
+            padding: 20px;
+            background: rgba(10, 10, 12, 0.8);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex; justify-content: space-between; align-items: center;
+            position: fixed; top: 0; width: 100%; z-index: 100;
+        }
+
+        .logo-hub { height: 40px; filter: drop-shadow(0 0 5px var(--keff-neon)); cursor: pointer; }
+
+        #wallet-global {
+            background: var(--gris-verre);
+            border: 1px solid var(--keff-neon);
+            padding: 8px 15px; border-radius: 20px;
+            font-weight: bold; color: var(--keff-neon);
+        }
+
+        /* 🎛️ NAVIGATION BAR (LES BOUTONS MAGIQUES) */
+        nav {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 10px; background: rgba(255,255,255,0.05);
+            padding: 10px; border-radius: 50px; backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1); z-index: 100;
+        }
+
+        .nav-btn {
+            background: none; border: none; color: white; padding: 10px 15px;
+            border-radius: 25px; cursor: pointer; transition: 0.3s;
+            font-size: 0.8rem; font-weight: bold; text-transform: uppercase;
+        }
+
+        .nav-btn:hover { background: rgba(255,255,255,0.1); }
+        .nav-btn.active { background: var(--keff-neon); color: black; }
+
+        /* 🖼️ SECTIONS (LES PLATEFORMES) */
+        .platform-container {
+            width: 100vw; height: 100vh;
+            padding-top: 100px; padding-bottom: 100px;
+            position: absolute; top: 0; left: 0;
+            display: none; opacity: 0; transform: translateY(20px);
+            transition: all var(--transition-speed) ease-in-out;
+            overflow-y: auto;
+        }
+
+        .platform-container.active-view { display: block; opacity: 1; transform: translateY(0); }
+
+        .glass-card {
+            background: var(--gris-verre); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px; padding: 30px; width: 90%; max-width: 800px;
+            margin: 20px auto; backdrop-filter: blur(5px);
+        }
+
+        h1 { color: var(--keff-neon); margin-bottom: 20px; font-size: 2rem; }
+        .accent-via { color: var(--via-neon); }
+        .accent-gor { color: var(--gor-neon); }
+
+        /* 🕹️ GEEKO NERD SPECIFIC */
+        .social-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
+        .emoji-btn { background: rgba(255,255,255,0.05); border: none; padding: 5px; border-radius: 5px; cursor: pointer; }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <img src="https://raw.githubusercontent.com/kefftech-labs/KeffTech-/f0ce68cd07dca25dab22f26cf2cc364b638dbff7/00B22785-4743-4AF3-AB30-C1BF085C1064.png" class="logo-hub" onclick="showPlatform('home')">
+        <div id="wallet-global">B$ 74 (Impôts Recup)</div>
+    </header>
+
+    <nav>
+        <button class="nav-btn active" onclick="showPlatform('bonusino', this)">Bonusino</button>
+        <button class="nav-btn" onclick="showPlatform('librarchia', this)">LibrarchiA</button>
+        <button class="nav-btn" onclick="showPlatform('via', this)">ViA</button>
+        <button class="nav-btn" onclick="showPlatform('golemotor', this)">GoleMotor</button>
+        <button class="nav-btn" onclick="showPlatform('geekonerd', this)">GeeksORnerds</button>
+    </nav>
+
+    <div id="home" class="platform-container active-view">
+        <div class="glass-card">
+            <h1>Bienvenue chez KeffTeckLabs</h1>
+            <p>Cliquez sur les boutons en bas pour basculer entre les réalités de la monade.</p>
+        </div>
+    </div>
+
+    <div id="bonusino" class="platform-container">
+        <div class="glass-card">
+            <h1>💰 Matrice Bonusino</h1>
+            <p>Flux actuel : <span class="accent-via">900 sh' d'économies/mois</span></p>
+            <p>Objectif 28 Juin : 800 sh' pour injection Claude.</p>
+            <button class="nav-btn" style="border:1px solid var(--keff-neon); margin-top:20px;" onclick="playKeffSound()">+ Gagner du Vent Blanc</button>
+        </div>
+    </div>
+
+    <div id="librarchia" class="platform-container">
+        <div class="glass-card">
+            <h1>🧠 LibrarchiA SaaS</h1>
+            <p>Assistant Coach, Content Generator & Ultra Pro.</p>
+            <div class="glass-card" style="margin-top:15px; background:rgba(0,153,255,0.05)">
+                <p>Status : <span class="accent-via">Prêt pour injection de code Core.</span></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="via" class="platform-container">
+        <div class="glass-card">
+            <h1 class="accent-via">🌀 ViA Operating System</h1>
+            <p>Architecture Subatomique - 1 MW Stable.</p>
+            <pre style="font-size:0.7rem; color:rgba(255,255,255,0.5); margin-top:10px;">
+                > Loading Chron archives...
+                > Density: 78.5 kW/L
+                > Status: ALL SYSTEMS GO
+            </pre>
+        </div>
+    </div>
+
+    <div id="golemotor" class="platform-container">
+        <div class="glass-card">
+            <h1>🚜 GoleMotor Workshop</h1>
+            <p>Matériel : Station S.R, Smartwear Médical & Hybride Volant.</p>
+            <p>Prochain achat : <span class="accent-via">Printer 3D & Cleaner.</span></p>
+        </div>
+    </div>
+
+    <div id="geekonerd" class="platform-container">
+        <div class="glass-card">
+            <h1 class="accent-gor">🕹️ GeeksORnerds Arène</h1>
+            <p>PvCvP : Bats les bots des programmeurs.</p>
+            <div class="social-grid" style="margin-top:20px;">
+                <button class="emoji-btn">👎</button><button class="emoji-btn">👍</button>
+                <button class="emoji-btn">🥵</button><button class="emoji-btn">🖕</button>
+                <button class="emoji-btn">❤️‍🔥</button><button class="emoji-btn">🫡</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // === 🪄 LOGIQUE DE CHANGEMENT DE PAGE MAGIQUE ===
+        function showPlatform(platformId, btn) {
+            // Désactiver toutes les vues
+            document.querySelectorAll('.platform-container').forEach(view => {
+                view.classList.remove('active-view');
+            });
+            // Activer la vue cible
+            const target = document.getElementById(platformId);
+            target.classList.add('active-view');
+
+            // Gérer l'état actif des boutons
+            if(btn) {
+                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            }
+
+            // Petit son de switch "Keff"
+            playKeffSound();
+        }
+
+        // === 🎵 GÉNÉRATEUR DE SON KEFF ===
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playKeffSound() {
+            if(audioCtx.state === 'suspended') audioCtx.resume();
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(440, audioCtx.currentTime);
+            oscillator.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.1);
+            gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.2);
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            oscillator.start();
+            oscillator.stop(audioCtx.currentTime + 0.2);
+        }
+
+        console.log("Hub KeffTeckLabs initialisé à 1 MW. Heheyyyy ! חי");
+    
+
         :root {
             --vent-noir: #0a0a0c;
             --vent-gris: #1a1a1f;

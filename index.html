@@ -5,60 +5,148 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>KeffTeckLabs - Hub Multiplateforme</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style>
-:root {
-    --noir: #050507;
-    --keff-neon: #00ff99; /* Vent Blanc */
-    --via-neon: #0099ff;  /* OS Core */
-    --or-royal: #ffcc00;  /* ROI 👑 */
-    --transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-}
+<style>
+    /* 🌌 GRIMOIRE DE STYLE : SKELETON GLASS, NEON & ARC-EN-CIEL */
+    :root {
+        --noir: #050507;
+        --verre: rgba(255, 255, 255, 0.03);
+        --keff: #00ff99; /* Vent Blanc */
+        --via: #0099ff;  /* Core OS */
+        --gor: #ff0055;  /* Friction Sociale */
+        --or: #ffcc00;   /* ROI Royal 👑 */
+        --speed: 0.4s;
+        --sidebar-width: 250px;
+    }
 
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-body { background-color: var(--noir); color: white; overflow: hidden; height: 100vh; }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+    
+    body { background-color: var(--noir); color: white; overflow-x: hidden; display: flex; }
 
-/* 🖼️ COUVERTURE LOGO GÉANTE */
-.hero-cover {
-    width: 100%; height: 45vh;
-    background: url('https://raw.githubusercontent.com/kefftech-labs/KeffTech-/f0ce68cd07dca25dab22f26cf2cc364b638dbff7/00B22785-4743-4AF3-AB30-C1BF085C1064.png') no-repeat center center;
-    background-size: contain;
-    filter: drop-shadow(0 0 20px var(--keff-neon));
-    animation: auraGold 4s infinite alternate;
-}
-@keyframes auraGold { 
-    0% { filter: drop-shadow(0 0 10px var(--keff-neon)); transform: scale(1); } 
-    100% { filter: drop-shadow(0 0 40px var(--or-royal)); transform: scale(1.02); } 
-}
+    /* 🌈 CLASSE MAGIQUE : TEXTE ARC-EN-CIEL ANIMÉ */
+    .text-rainbow {
+        background: linear-gradient(
+            to right,
+            #ff0000,
+            #ff7f00,
+            #ffff00,
+            #00ff00,
+            #0000ff,
+            #4b0082,
+            #8b00ff,
+            #ff0000
+        );
+        background-size: 200% auto;
+        color: transparent;
+        -webkit-background-clip: text;
+        background-clip: text;
+        animation: shineRainbow 5s linear infinite;
+        text-shadow: none;
+    }
 
-/* 🎟️ MULTIPASS CARDS */
-.pass-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-top: 20px; }
-.pass-card { 
-    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); 
-    border-radius: 15px; padding: 15px; text-align: center; transition: var(--transition);
-}
-.pass-card:hover { border-color: var(--or-royal); transform: translateY(-5px); }
-.pro { border: 2px solid var(--or-royal); background: rgba(255, 204, 0, 0.05); }
+    @keyframes shineRainbow {
+        to { background-position: 200% center; }
+    }
 
-/* 🎛️ NAVIGATION MAGIQUE (BASSE) */
-nav {
-    position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%);
-    display: flex; gap: 8px; background: rgba(255,255,255,0.05);
-    padding: 10px; border-radius: 50px; backdrop-filter: blur(15px);
-    border: 1px solid rgba(255,255,255,0.1); z-index: 1000; width: 95%; max-width: 600px;
-}
-.nav-btn {
-    background: none; border: none; color: white; padding: 10px;
-    border-radius: 25px; cursor: pointer; transition: 0.3s; font-size: 0.7rem; font-weight: bold;
-}
-.nav-btn.active { background: var(--keff-neon); color: black; }
+    /* 🗄️ BARRE DE MENU LATÉRALE (SIDEBAR) */
+    .sidebar {
+        width: var(--sidebar-width);
+        height: 100vh;
+        background: rgba(10, 10, 12, 0.95);
+        border-right: 1px solid rgba(255,255,255,0.05);
+        position: fixed;
+        top: 0; left: 0;
+        padding: 30px 20px;
+        display: flex; flex-direction: column; gap: 20px;
+        z-index: 2000;
+    }
 
-/* 📦 CONTAINERS */
-.platform-container {
-    width: 100vw; height: 100vh; padding: 70px 20px 100px 20px;
-    position: absolute; top: 0; left: 0; display: none; opacity: 0;
-    transition: var(--transition); overflow-y: auto;
-}
-.active-view { display: block; opacity: 1; }
+    .sidebar-logo { filter: drop-shadow(0 0 10px var(--keff)); width: 100%; margin-bottom: 20px; }
+    
+    .side-btn {
+        background: var(--verre); border: 1px solid rgba(255,255,255,0.1);
+        color: white; padding: 15px; border-radius: 10px; cursor: pointer;
+        text-align: left; font-weight: bold; transition: 0.3s;
+    }
+    .side-btn:hover { background: rgba(255,255,255,0.1); border-color: var(--keff); }
+    .side-btn.gold { border-color: var(--or); color: var(--or); background: rgba(255,204,0,0.05); }
+
+    #wallet-global { margin-top: auto; border: 1px solid var(--or); padding: 15px; border-radius: 10px; color: var(--or); text-align: center; font-weight: bold; }
+
+    /* 📦 ZONE DE CONTENU PRINCIPALE (Scrollable) */
+    .main-content {
+        margin-left: var(--sidebar-width);
+        width: calc(100% - var(--sidebar-width));
+        min-height: 100vh;
+        padding-bottom: 100px;
+        position: relative;
+    }
+
+    /* 🖼️ COUVERTURE LOGO GÉANTE */
+    .hero-cover {
+        width: 100%; height: 50vh;
+        background: url('https://raw.githubusercontent.com/kefftech-labs/KeffTech-/f0ce68cd07dca25dab22f26cf2cc364b638dbff7/00B22785-4743-4AF3-AB30-C1BF085C1064.png') no-repeat center center;
+        background-size: contain; 
+        filter: drop-shadow(0 0 20px var(--keff));
+        animation: auraGold 4s infinite alternate;
+    }
+    @keyframes auraGold { 
+        0% { filter: drop-shadow(0 0 10px var(--keff)); transform: scale(1); } 
+        100% { filter: drop-shadow(0 0 40px var(--or)); transform: scale(1.02); } 
+    }
+
+    /* 🧩 CONTAINERS DES PAGES */
+    .platform-container {
+        padding: 20px;
+        display: none; opacity: 0; transform: translateY(20px);
+        transition: all var(--speed) ease;
+    }
+    .active-view { display: block; opacity: 1; transform: translateY(0); animation: fadeIn var(--speed) forwards; }
+    
+    @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
+
+    /* 💎 GLASS CARDS & ARTICLES */
+    .glass-card {
+        background: var(--verre); border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 20px; padding: 30px; width: 100%; max-width: 900px;
+        margin: 20px auto; backdrop-filter: blur(10px);
+    }
+    
+    .article-text { line-height: 1.8; font-size: 1.1rem; color: #d0d0d0; }
+    
+    /* Les classes de couleur classiques */
+    .text-gold { color: var(--or); text-shadow: 0 0 10px rgba(255, 204, 0, 0.5); }
+    .text-keff { color: var(--keff); }
+    .text-via { color: var(--via); }
+    .text-gor { color: var(--gor); }
+
+    /* 🎟️ MULTIPASS DESIGN */
+    .pass-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-top: 30px; }
+    .pass-card { border: 1px solid rgba(255,255,255,0.1); text-align: center; padding: 25px; transition: 0.3s; border-radius: 15px; }
+    .pass-card:hover { border-color: var(--or); transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+    .pro { border: 2px solid var(--or); background: rgba(255, 204, 0, 0.05); }
+
+    /* 🎛️ NAVIGATION BARRE MAGIQUE (BASSE) */
+    nav.bottom-nav {
+        position: fixed; bottom: 20px; left: calc(50% + (var(--sidebar-width) / 2)); transform: translateX(-50%);
+        display: flex; gap: 8px; background: rgba(10,10,12,0.8);
+        padding: 10px; border-radius: 50px; backdrop-filter: blur(20px);
+        border: 1px solid rgba(255,255,255,0.1); z-index: 1000; width: 90%; max-width: 600px; justify-content: space-around;
+    }
+    .nav-btn {
+        background: none; border: none; color: white; padding: 12px 15px;
+        border-radius: 25px; cursor: pointer; font-size: 0.8rem; font-weight: bold; text-transform: uppercase; transition: 0.3s;
+    }
+    .nav-btn.active { background: var(--keff); color: black; box-shadow: 0 0 15px var(--keff); }
+
+    /* MULTILANGUES */
+    #langSwitcher { background: var(--verre); color: white; border: 1px solid rgba(255,255,255,0.2); padding: 10px; border-radius: 10px; cursor: pointer; width: 100%; font-size:1.1rem; }
+
+    /* RESPONSIVE MOBILE */
+    @media (max-width: 768px) {
+        .sidebar { display: none; }
+        .main-content { margin-left: 0; width: 100%; }
+        nav.bottom-nav { left: 50%; }
+    }
 </style>
 
 </head>

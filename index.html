@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>ViA — Virtual Intelligence Architecture · KeffTech Labs</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Cinzel+Decorative:wght@700;900&family=Raleway:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<style>
+/* ══════════════════════════════════════════
+   RESET & VARIABLES
+══════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gold:#ffd700;--gold2:#ff8c00;--gold-dim:#ffd70044;
+  --cyan:#00f5ff;--cyan-dim:#00f5ff22;
+  --bg:#000008;--bg2:#030315;--surface:#05051e;
+  --border:rgba(255,215,0,.16);
+  --text:#e8e0c8;--muted:#777;
+  --font-title:'Cinzel Decorative','Cinzel',serif;
+  --font-body:'Raleway',sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Cinzel',Georgia,serif;
+  background:var(--bg);color:var(--text);
+  min-height:100vh;overflow-x:hidden;
+}
+img{display:block;max-width:100%}
+button{cursor:pointer;font-family:inherit}
+::-webkit-scrollbar{width:3px;height:3px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--gold-dim);border-radius:2px}
+
+/* ══════════════════════════════════════════
+   KEYFRAMES
+══════════════════════════════════════════ */
+@keyframes goldGlow{
+  0%,100%{text-shadow:0 0 10px var(--gold),0 0 20px var(--gold)}
+  50%{text-shadow:0 0 25px var(--gold),0 0 60px var(--gold2),0 0 90px var(--gold)}
+}
+@keyframes rainbowShift{
+  0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}
+}
+@keyframes floatUp{
+  0%{transform:translateY(0) scale(1);opacity:.3}
+  100%{transform:translateY(-35px) scale(1.7);opacity:.75}
+}
+@keyframes fadeUp{
+  from{transform:translateY(24px);opacity:0}
+  to{transform:translateY(0);opacity:1}
+}
+@keyframes pulse{
+  0%,100%{opacity:1;transform:scale(1)}
+  50%{opacity:.65;transform:scale(.96)}
+}
+@keyframes typing{
+  from{width:0}to{width:100%}
+}
+@keyframes blink{
+  0%,100%{opacity:1}50%{opacity:0}
+}
+@keyframes scanLine{
+  0%{top:0}100%{top:100%}
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes slideInLeft{
+  from{transform:translateX(-20px);opacity:0}
+  to{transform:translateX(0);opacity:1}
+}
+@keyframes modeGlow{
+  0%,100%{box-shadow:0 0 0 rgba(0,245,255,0)}
+  50%{box-shadow:0 0 24px rgba(0,245,255,.35)}
+}
+
+/* ══════════════════════════════════════════
+   UTILITIES
+══════════════════════════════════════════ */
+.gold-text{color:var(--gold);animation:goldGlow 2.8s ease-in-out infinite}
+.rainbow-text{
+  background:linear-gradient(90deg,#f00,#f70,#ff0,#0f0,#0ff,#00f,#f0f,#f00);
+  background-size:300% 100%;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;animation:rainbowShift 4s linear infinite;
+}
+.fade-up{animation:fadeUp .5s ease both}
+
+/* ══════════════════════════════════════════
+   PARTICLES
+══════════════════════════════════════════ */
+#particles{
+  position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;
+}
+#particles::before{
+  content:'';position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(0,245,255,.022) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,245,255,.022) 1px,transparent 1px);
+  background-size:55px 55px;
+}
+#particles::after{
+  content:'';position:absolute;top:40%;left:50%;
+  transform:translate(-50%,-50%);
+  width:600px;height:600px;border-radius:50%;
+  background:radial-gradient(circle,rgba(0,245,255,.04) 0%,transparent 70%);
+}
+.particle{
+  position:absolute;border-radius:50%;
+  animation:floatUp var(--d) var(--dl) infinite alternate ease-in-out;
+}
+
+/* ══════════════════════════════════════════
+   TOPBAR
+══════════════════════════════════════════ */
+#topbar{
+  position:sticky;top:0;z-index:200;
+  display:flex;align-items:center;gap:8px;
+  height:54px;padding:0 14px;
+  background:rgba(0,0,12,.78);
+  backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
+  border-bottom:1px solid var(--border);
+  transition:background .3s;
+}
+#topbar.scrolled{background:rgba(0,0,12,.97)}
+.topbar-back{
+  background:none;border:none;color:var(--gold);
+  font-size:20px;padding:0 10px 0 0;flex-shrink:0;
+  transition:transform .2s;
+}
+.topbar-back:hover{transform:translateX(-3px)}
+.brand{display:flex;align-items:center;gap:7px;flex-shrink:0;margin-right:12px}
+.brand-logo{width:30px;height:30px;border-radius:6px;object-fit:contain;border:1px solid var(--gold-dim)}
+.brand-name{font-size:12px;font-weight:900;letter-spacing:2px;text-transform:uppercase;color:var(--gold);animation:goldGlow 3s ease-in-out infinite}
+/* platform tabs */
+.tab-scroll-btn{background:none;border:none;color:rgba(255,215,0,.5);font-size:19px;padding:0 4px;transition:color .2s}
+.tab-scroll-btn:hover{color:var(--gold)}
+#plat-tabs{
+  display:flex;gap:5px;overflow-x:auto;flex:1;
+  scroll-behavior:smooth;scrollbar-width:none;padding:0 4px;
+}
+#plat-tabs::-webkit-scrollbar{display:none}
+.tab-btn{
+  white-space:nowrap;padding:6px 15px;border-radius:20px;
+  font-size:11px;letter-spacing:1px;font-family:'Cinzel',serif;
+  background:rgba(255,255,255,.04);color:#888;
+  border:1px solid rgba(255,255,255,.07);transition:all .25s;
+}
+.tab-btn:hover{color:#ccc;border-color:rgba(255,255,255,.18)}
+.tab-btn.active{
+  background:rgba(0,245,255,.12);color:var(--cyan);
+  border-color:rgba(0,245,255,.4);
+  box-shadow:0 0 10px rgba(0,245,255,.25);
+}
+/* lang */
+.lang-row{display:flex;gap:3px;flex-shrink:0}
+.lang-btn{
+  padding:4px 7px;border:none;border-radius:4px;
+  font-size:10px;letter-spacing:1px;text-transform:uppercase;
+  background:transparent;color:#555;transition:all .2s;font-family:'Cinzel',serif;
+}
+.lang-btn:hover{color:var(--gold)}
+.lang-btn.active{background:rgba(255,215,0,.14);color:var(--gold)}
+
+/* ══════════════════════════════════════════
+   MAIN LAYOUT
+══════════════════════════════════════════ */
+#main{position:relative;z-index:10;max-width:1100px;margin:0 auto;padding:0 16px 80px}
+
+/* ══════════════════════════════════════════
+   HERO ViA
+══════════════════════════════════════════ */
+#hero-via{
+  text-align:center;padding:60px 20px 40px;
+}
+.via-logo-ring{
+  position:relative;width:130px;height:130px;margin:0 auto 28px;
+}
+.via-logo-ring::before{
+  content:'';position:absolute;inset:-6px;border-radius:50%;
+  border:2px solid rgba(0,245,255,.3);
+  animation:spin 8s linear infinite;
+  border-top-color:var(--cyan);border-right-color:var(--gold);
+}
+.via-logo-ring::after{
+  content:'';position:absolute;inset:-14px;border-radius:50%;
+  border:1px solid rgba(255,215,0,.12);
+  animation:spin 14s linear infinite reverse;
+  border-bottom-color:var(--gold);
+}
+.via-logo-inner{
+  width:100%;height:100%;border-radius:50%;
+  background:linear-gradient(135deg,rgba(0,245,255,.12),rgba(255,215,0,.08));
+  border:2px solid rgba(0,245,255,.3);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 40px rgba(0,245,255,.12),inset 0 0 20px rgba(0,245,255,.04);
+  position:relative;z-index:1;overflow:hidden;
+}
+.via-logo-img{width:82px;height:82px;border-radius:50%;object-fit:cover}
+.via-title{
+  font-family:var(--font-title);
+  font-size:clamp(36px,8vw,72px);font-weight:900;
+  letter-spacing:clamp(6px,1.2vw,14px);
+  color:var(--cyan);text-transform:uppercase;margin-bottom:6px;
+  text-shadow:0 0 20px var(--cyan),0 0 40px rgba(0,245,255,.4);
+}
+.via-sub{
+  font-size:clamp(11px,2vw,15px);letter-spacing:5px;
+  font-weight:600;text-transform:uppercase;margin-bottom:14px;
+}
+.via-tagline{
+  color:var(--muted);font-size:13px;font-style:italic;
+  font-family:var(--font-body);max-width:460px;
+  margin:0 auto 32px;line-height:1.7;
+}
+
+/* ══════════════════════════════════════════
+   MODE SELECTOR
+══════════════════════════════════════════ */
+#mode-selector{
+  display:flex;gap:10px;justify-content:center;
+  flex-wrap:wrap;margin-bottom:40px;
+}
+.mode-btn{
+  padding:10px 22px;border-radius:50px;
+  font-size:12px;letter-spacing:1.5px;font-family:'Cinzel',serif;
+  border:1px solid rgba(0,245,255,.25);
+  background:rgba(0,245,255,.05);color:#aaa;
+  transition:all .3s;position:relative;overflow:hidden;
+}
+.mode-btn::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 50% 0%,rgba(0,245,255,.15),transparent 70%);
+  opacity:0;transition:opacity .3s;
+}
+.mode-btn:hover::before,.mode-btn.active::before{opacity:1}
+.mode-btn:hover,.mode-btn.active{
+  color:var(--cyan);border-color:rgba(0,245,255,.6);
+  box-shadow:0 0 20px rgba(0,245,255,.2);
+  animation:modeGlow 2s ease-in-out infinite;
+}
+.mode-icon{margin-right:6px}
+
+/* ══════════════════════════════════════════
+   CHAT INTERFACE
+══════════════════════════════════════════ */
+#via-chat{
+  background:linear-gradient(145deg,#030315,#05051e);
+  border:1px solid rgba(0,245,255,.2);
+  border-radius:24px;overflow:hidden;
+  box-shadow:0 0 60px rgba(0,245,255,.06);
+  margin-bottom:40px;
+  animation:fadeUp .6s ease;
+}
+.chat-header{
+  display:flex;align-items:center;gap:12px;
+  padding:18px 24px;
+  border-bottom:1px solid rgba(0,245,255,.1);
+  background:rgba(0,245,255,.04);
+  position:relative;overflow:hidden;
+}
+.chat-header::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--cyan),transparent);
+}
+.chat-status-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--cyan);
+  box-shadow:0 0 8px var(--cyan);
+  animation:pulse 1.4s ease-in-out infinite;
+  flex-shrink:0;
+}
+.chat-header-info{flex:1}
+.chat-header-name{font-size:14px;font-weight:700;color:var(--cyan);letter-spacing:1px}
+.chat-header-mode{font-size:10px;color:var(--muted);letter-spacing:2px;margin-top:2px}
+.chat-header-pawa{
+  font-size:10px;color:var(--gold);font-family:var(--font-mono);
+  background:rgba(255,215,0,.08);border:1px solid rgba(255,215,0,.2);
+  border-radius:20px;padding:4px 10px;
+}
+
+/* messages */
+#chat-messages{
+  height:360px;overflow-y:auto;padding:20px;
+  display:flex;flex-direction:column;gap:14px;
+}
+.msg{display:flex;gap:10px;animation:slideInLeft .35s ease}
+.msg.user{flex-direction:row-reverse}
+.msg-avatar{
+  width:34px;height:34px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;border:1px solid rgba(0,245,255,.25);
+  background:rgba(0,245,255,.06);
+}
+.msg.user .msg-avatar{
+  border-color:rgba(255,215,0,.25);background:rgba(255,215,0,.06);
+}
+.msg-bubble{
+  max-width:72%;padding:12px 16px;border-radius:16px;
+  font-family:var(--font-body);font-size:13px;line-height:1.65;
+  background:rgba(0,245,255,.07);border:1px solid rgba(0,245,255,.15);
+  color:#ddd;border-bottom-left-radius:4px;
+}
+.msg.user .msg-bubble{
+  background:rgba(255,215,0,.07);border-color:rgba(255,215,0,.18);
+  color:#e8e0c8;border-bottom-right-radius:4px;border-bottom-left-radius:16px;
+}
+.msg-meta{font-size:9px;color:#444;letter-spacing:1px;margin-top:5px;text-align:right}
+.msg .msg-meta{text-align:left}
+.typing-bubble{display:flex;gap:4px;padding:14px 16px;background:rgba(0,245,255,.05);border:1px solid rgba(0,245,255,.1);border-radius:16px;border-bottom-left-radius:4px}
+.typing-dot{width:6px;height:6px;border-radius:50%;background:var(--cyan);opacity:.5;animation:pulse .8s ease-in-out infinite}
+.typing-dot:nth-child(2){animation-delay:.15s}
+.typing-dot:nth-child(3){animation-delay:.3s}
+
+/* input row */
+.chat-input-row{
+  display:flex;gap:10px;padding:16px 20px;
+  border-top:1px solid rgba(0,245,255,.1);
+  background:rgba(0,0,20,.4);
+}
+.chat-input{
+  flex:1;padding:12px 16px;
+  background:rgba(0,245,255,.05);
+  border:1px solid rgba(0,245,255,.2);
+  border-radius:50px;color:var(--text);
+  font-family:var(--font-body);font-size:13px;
+  outline:none;transition:border-color .25s;
+}
+.chat-input::placeholder{color:#444}
+.chat-input:focus{border-color:rgba(0,245,255,.5);box-shadow:0 0 12px rgba(0,245,255,.12)}
+.chat-send{
+  width:44px;height:44px;border-radius:50%;border:none;
+  background:linear-gradient(135deg,var(--cyan),rgba(0,200,220,.6));
+  color:#000;font-size:18px;display:flex;align-items:center;justify-content:center;
+  transition:transform .2s,box-shadow .2s;flex-shrink:0;
+}
+.chat-send:hover{transform:scale(1.1);box-shadow:0 0 16px rgba(0,245,255,.35)}
+
+/* ══════════════════════════════════════════
+   FEATURE CARDS
+══════════════════════════════════════════ */
+.section-label{
+  font-size:9px;letter-spacing:4px;text-transform:uppercase;
+  margin-bottom:6px;
+}
+.section-rule{
+  width:50px;height:1px;margin-bottom:28px;
+  background:linear-gradient(90deg,var(--cyan),transparent);
+}
+.features-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:16px;margin-bottom:40px;
+}
+.feat-card{
+  background:linear-gradient(145deg,#030315,#05051e);
+  border:1px solid rgba(0,245,255,.12);border-radius:16px;
+  padding:22px;position:relative;overflow:hidden;
+  transition:all .3s cubic-bezier(.175,.885,.32,1.275);
+  animation:fadeUp .5s ease both;
+}
+.feat-card:hover{
+  transform:translateY(-5px) scale(1.01);
+  border-color:rgba(0,245,255,.4);
+  box-shadow:0 8px 28px rgba(0,245,255,.1);
+}
+.feat-card::before{
+  content:'';position:absolute;top:-20px;right:-20px;
+  width:100px;height:100px;border-radius:50%;
+  background:radial-gradient(circle,rgba(0,245,255,.1) 0%,transparent 70%);
+}
+.feat-icon{font-size:28px;margin-bottom:12px}
+.feat-name{
+  font-size:14px;font-weight:700;color:var(--cyan);
+  letter-spacing:1px;margin-bottom:8px;
+}
+.feat-desc{
+  font-family:var(--font-body);font-size:12px;
+  color:#aaa;line-height:1.7;
+}
+.feat-badge{
+  display:inline-block;margin-top:12px;
+  font-size:9px;letter-spacing:2px;text-transform:uppercase;
+  padding:3px 10px;border-radius:20px;
+  background:rgba(0,245,255,.08);
+  color:var(--cyan);border:1px solid rgba(0,245,255,.2);
+}
+
+/* ══════════════════════════════════════════
+   LOGICS TABLE
+══════════════════════════════════════════ */
+.logics-section{margin-bottom:40px}
+.logics-table{
+  width:100%;border-collapse:collapse;
+  font-family:var(--font-body);font-size:12px;
+}
+.logics-table thead th{
+  padding:10px 14px;text-align:left;
+  font-size:9px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--muted);border-bottom:1px solid rgba(0,245,255,.15);
+  font-family:'Cinzel',serif;
+}
+.logics-table tbody tr{
+  border-bottom:1px solid rgba(255,255,255,.04);
+  transition:background .2s;
+}
+.logics-table tbody tr:hover{background:rgba(0,245,255,.04)}
+.logics-table td{padding:10px 14px;color:#bbb;vertical-align:top}
+.logics-table td:first-child{
+  color:var(--cyan);font-family:var(--font-mono);font-size:11px;
+  white-space:nowrap;font-weight:700;
+}
+.logics-table td:nth-child(2){color:#e8e0c8;font-weight:600}
+.unique-badge{
+  display:inline-block;font-size:8px;letter-spacing:2px;
+  padding:2px 7px;border-radius:20px;
+  background:rgba(0,245,255,.08);color:var(--cyan);
+  border:1px solid rgba(0,245,255,.18);
+}
+
+/* ══════════════════════════════════════════
+   PAWA ECONOMY
+══════════════════════════════════════════ */
+.economy-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+  gap:12px;margin-bottom:40px;
+}
+.eco-card{
+  background:linear-gradient(145deg,#030315,#05051e);
+  border-radius:14px;padding:20px;text-align:center;
+  border:1px solid rgba(255,215,0,.14);
+  transition:all .3s;animation:fadeUp .5s ease both;
+}
+.eco-card:hover{border-color:rgba(255,215,0,.4);transform:translateY(-4px)}
+.eco-pawa{
+  font-size:22px;font-weight:900;color:var(--gold);
+  font-family:var(--font-mono);letter-spacing:1px;
+  animation:goldGlow 3s ease-in-out infinite;
+}
+.eco-berg{font-size:12px;color:var(--cyan);font-family:var(--font-mono);margin:4px 0}
+.eco-label{font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase}
+
+/* ══════════════════════════════════════════
+   CTA SECTION
+══════════════════════════════════════════ */
+.cta-row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:40px}
+.cta-primary{
+  padding:14px 30px;
+  background:linear-gradient(135deg,var(--cyan),rgba(0,200,220,.7));
+  color:#000;border:none;border-radius:50px;
+  font-weight:700;font-size:14px;letter-spacing:2px;font-family:'Cinzel',serif;
+  box-shadow:0 4px 22px rgba(0,245,255,.25);
+  transition:transform .2s,box-shadow .2s;
+}
+.cta-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,245,255,.4)}
+.cta-gold{
+  padding:14px 30px;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  color:#000;border:none;border-radius:50px;
+  font-weight:700;font-size:14px;letter-spacing:2px;font-family:'Cinzel',serif;
+  box-shadow:0 4px 22px rgba(255,215,0,.22);
+  transition:transform .2s,box-shadow .2s;
+}
+.cta-gold:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(255,215,0,.38)}
+.cta-ghost{
+  padding:14px 30px;background:transparent;
+  color:var(--cyan);border:1px solid rgba(0,245,255,.35);
+  border-radius:50px;font-weight:600;font-size:14px;
+  letter-spacing:2px;font-family:'Cinzel',serif;transition:all .2s;
+}
+.cta-ghost:hover{background:rgba(0,245,255,.06);transform:translateY(-2px)}
+
+/* ══════════════════════════════════════════
+   FOOTER
+══════════════════════════════════════════ */
+#footer{
+  position:relative;z-index:10;text-align:center;
+  border-top:1px solid rgba(255,215,0,.08);
+  padding:22px 20px;
+}
+.footer-quote{
+  font-size:11px;font-style:italic;letter-spacing:3px;
+  color:var(--gold);animation:goldGlow 4s ease-in-out infinite;margin-bottom:6px;
+}
+.footer-copy{color:#333;font-size:9px;letter-spacing:2px}
+
+/* ══════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════ */
+@media(max-width:600px){
+  #chat-messages{height:280px}
+  .feat-card,.eco-card{padding:16px}
+}
+</style>
+</head>
+<body>
+
+<!-- PARTICLES -->
+<div id="particles"></div>
+
+<!-- ══════════════════════════════════════════
+     TOPBAR
+══════════════════════════════════════════ -->
+<header id="topbar">
+  <button class="topbar-back" onclick="goHub()" title="Hub">←</button>
+  <div class="brand">
+    <img class="brand-logo"
+      src="https://raw.githubusercontent.com/kefftech-labs/KeffTech/a2d8f9e7acba6c3a19a0b17f53624bcefc88ef74/00B22785-4743-4AF3-AB30-C1BF085C1064.png"
+      onerror="this.style.display='none'" alt="KeffTech"/>
+    <span class="brand-name">KeffTech</span>
+  </div>
+  <button class="tab-scroll-btn" onclick="scrollTabs(-1)">‹</button>
+  <div id="plat-tabs"></div>
+  <button class="tab-scroll-btn" onclick="scrollTabs(1)">›</button>
+  <div class="lang-row">
+    <button class="lang-btn active" onclick="setLang('fr')">FR</button>
+    <button class="lang-btn"        onclick="setLang('en')">EN</button>
+    <button class="lang-btn"        onclick="setLang('he')">עב</button>
+  </div>
+</header>
+
+<!-- ══════════════════════════════════════════
+     MAIN
+══════════════════════════════════════════ -->
+<main id="main">
+
+  <!-- HERO -->
+  <section id="hero-via" class="fade-up">
+    <div class="via-logo-ring">
+      <div class="via-logo-inner">
+        <img class="via-logo-img"
+          src="https://raw.githubusercontent.com/kefftech-labs/KeffTech/a2d8f9e7acba6c3a19a0b17f53624bcefc88ef74/IMG_0553.jpeg"
+          onerror="this.parentNode.innerHTML='<span style=font-size:50px>🧠</span>'"
+          alt="ViA"/>
+      </div>
+    </div>
+    <h1 class="via-title" id="via-title">ViA</h1>
+    <div class="via-sub rainbow-text" id="via-sub">Virtual Intelligence Architecture</div>
+    <p class="via-tagline" id="via-tagline">"L'énergie sémantique ne meurt jamais — ViA la recycle en thèses."</p>
+
+    <!-- MODE SELECTOR -->
+    <div id="mode-selector">
+      <button class="mode-btn active" onclick="setMode('coach')" id="btn-coach">
+        <span class="mode-icon">🎓</span><span id="lbl-coach">Coach IA</span>
+      </button>
+      <button class="mode-btn" onclick="setMode('bff')" id="btn-bff">
+        <span class="mode-icon">💬</span><span id="lbl-bff">BFF Mode</span>
+      </button>
+      <button class="mode-btn" onclick="setMode('challenger')" id="btn-challenger">
+        <span class="mode-icon">⚔️</span><span id="lbl-challenger">Challenger</span>
+      </button>
+      <button class="mode-btn" onclick="setMode('gen')" id="btn-gen">
+        <span class="mode-icon">✨</span><span id="lbl-gen">Générateur 8K</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- CHAT INTERFACE -->
+  <div id="via-chat">
+    <div class="chat-header">
+      <div class="chat-status-dot"></div>
+      <div class="chat-header-info">
+        <div class="chat-header-name" id="chat-mode-name">ViA — Mode Coach IA</div>
+        <div class="chat-header-mode" id="chat-mode-sub">Protocole Zero · Prêt à analyser</div>
+      </div>
+      <div class="chat-header-pawa" id="chat-pawa">⚡ 0 PAWA·Ê</div>
+    </div>
+
+    <div id="chat-messages"></div>
+
+    <div class="chat-input-row">
+      <input class="chat-input" id="chat-input" type="text"
+        placeholder="Pose ta question à ViA…" autocomplete="off"
+        onkeydown="if(event.key==='Enter')sendMsg()"/>
+      <button class="chat-send" onclick="sendMsg()">↑</button>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <section>
+    <div class="section-label rainbow-text" id="sec-features">Fonctionnalités</div>
+    <div class="section-rule"></div>
+    <div class="features-grid" id="features-grid"></div>
+  </section>
+
+  <!-- LOGIQUES ORIGINALES -->
+  <section class="logics-section">
+    <div class="section-label rainbow-text" id="sec-logics">12 Logiques Originales</div>
+    <div class="section-rule"></div>
+    <div style="background:linear-gradient(145deg,#030315,#05051e);border:1px solid rgba(0,245,255,.12);border-radius:16px;overflow:hidden;animation:fadeUp .5s ease">
+      <table class="logics-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th id="th-name">Logique</th>
+            <th id="th-desc">Description</th>
+            <th id="th-status">Statut</th>
+          </tr>
+        </thead>
+        <tbody id="logics-body"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- PAWA ECONOMY -->
+  <section>
+    <div class="section-label rainbow-text" id="sec-economy">Économie PAWA·Ê</div>
+    <div class="section-rule"></div>
+    <div class="economy-grid" id="economy-grid"></div>
+  </section>
+
+  <!-- CTA -->
+  <div class="cta-row">
+    <button class="cta-primary" id="cta-try">🧠 Essayer ViA Gratuitement</button>
+    <button class="cta-gold" id="cta-platinum">✦ ViA PLATINUM</button>
+    <button class="cta-ghost" id="cta-docs">📄 Documentation</button>
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer id="footer">
+  <p class="footer-quote">"L'énergie ne meurt jamais. Elle change de forme. BERG la recycle."</p>
+  <p class="footer-copy">© 2026 ViArtificial Labs · KeffTech Labs · SAM · Shmouel Haï · golemotor.io</p>
+</footer>
+
+<!-- ══════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════ -->
+<script>
+/* ─── PLATFORMS NAV ─── */
+const PLATS=[
+  {id:'hub',    name:'🏠 Hub',    url:'KeffTechHub.html'},
+  {id:'via',    name:'🧠 ViA',    url:'via.html'},
+  {id:'golemotor',name:'⚡ GoleMotor',url:'golemotor.html'},
+  {id:'geekonerd',name:'🌐 GeekoNerd',url:'geekonerd.html'},
+  {id:'librarchia',name:'📚 Librarchia',url:'librarchia.html'},
+  {id:'bonusino',name:'🎰 Bonusino',url:'bonusino.html'},
+  {id:'punch',  name:'🥊 Punch Pulse',url:'punch.html'},
+];
+function buildTabs(){
+  const c=document.getElementById('plat-tabs');
+  c.innerHTML='';
+  PLATS.forEach(p=>{
+    const b=document.createElement('button');
+    b.className='tab-btn'+(p.id==='via'?' active':'');
+    b.textContent=p.name;
+    b.onclick=()=>{ if(p.id!=='via') location.href=p.url; };
+    c.appendChild(b);
+  });
+}
+function scrollTabs(d){document.getElementById('plat-tabs').scrollLeft+=d*160}
+function goHub(){location.href='KeffTechHub.html'}
+buildTabs();
+
+/* ─── PARTICLES ─── */
+const PCOLS=['#00f5ff','#ffd700','#ff00ff','#00ff88','#7c3aed'];
+const pc=document.getElementById('particles');
+for(let i=0;i<48;i++){
+  const el=document.createElement('div');
+  el.className='particle';
+  const s=Math.random()*2.5+.8;
+  const c=PCOLS[i%5];
+  el.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;width:${s}px;height:${s}px;background:${c};box-shadow:0 0 ${s*4}px ${c};--d:${Math.random()*16+9}s;--dl:${Math.random()*8}s;`;
+  pc.appendChild(el);
+}
+
+/* ─── TOPBAR SCROLL ─── */
+window.addEventListener('scroll',()=>
+  document.getElementById('topbar').classList.toggle('scrolled',scrollY>40));
+
+/* ─── LANG ─── */
+const LANGS={
+  fr:{
+    via_sub:'Virtual Intelligence Architecture',
+    via_tagline:'"L\'énergie sémantique ne meurt jamais — ViA la recycle en thèses."',
+    coach:'Coach IA',bff:'BFF Mode',challenger:'Challenger',gen:'Générateur 8K',
+    features:'Fonctionnalités',logics:'12 Logiques Originales',economy:'Économie PAWA·Ê',
+    th_name:'Logique',th_desc:'Description',th_status:'Statut',
+    try:'🧠 Essayer ViA Gratuitement',platinum:'✦ ViA PLATINUM',docs:'📄 Documentation',
+    placeholder:'Pose ta question à ViA…',
+    chat_greet:'Shalom ! Je suis ViA en mode **Coach IA**. Je commence toujours par le Protocole Zero : qui es-tu ? Quelle heure est-il là où tu es ? Comment tu te sens ?',
+    modes:{
+      coach:{name:'ViA — Mode Coach IA',sub:'Protocole Zero · Analyse dialectique'},
+      bff:{name:'ViA — Mode BFF',sub:'Confidentiel · Écoute active · Empathie'},
+      challenger:{name:'ViA — Mode Challenger',sub:'Synthèse Passive-Agressive · L01'},
+      gen:{name:'ViA — Mode Générateur 8K',sub:'Images · Vidéos · Audio · Code'},
+    },
+    feats:[
+      {icon:'🎓',name:'Coach IA',desc:'Protocole Zero (L07) · Delta temps dynamique · Thèse radicale vs passive selon ton profil.',badge:'L07 Protocole Zero'},
+      {icon:'💬',name:'BFF Mode',desc:'ViA détecte automatiquement quand tu as besoin d\'un ami et bascule en mode confidentiel.',badge:'L12 BFF Switch'},
+      {icon:'⚔️',name:'Mode Challenger',desc:'La synthèse CONTIENT la tension (L01) au lieu de la neutraliser — dépasse Hegel 1807.',badge:'L01 Synthèse PA'},
+      {icon:'✨',name:'Générateur 8K',desc:'Images 8K, vidéos 30s, audio 1m55, code maker. Contenu généré, alimenté par PAWA sémantique.',badge:'Content Engine'},
+      {icon:'📊',name:'Fractal Multi-POV',desc:'Toutes les thèses contradictoires valides SELON le caractère de l\'utilisateur. Pas de hiérarchie.',badge:'L03 Fractal'},
+      {icon:'🔇',name:'Lecture du Silence',desc:'Laisse tomber = donnée sémantique à 4 niveaux. Le refus est une thèse plus riche que la réponse.',badge:'L08 Refus'},
+      {icon:'📈',name:'Anchor Croissance',desc:'Mesure la croissance de complexité de la conversation. Aucun LLM ne fait ça.',badge:'L09 Unique'},
+      {icon:'🚪',name:'Signal Fin Implicite',desc:'Fermer l\'app sans au revoir = problème résolu = +PAWA automatique (Duolingo a mis 8 ans).',badge:'L10 ±PAWA'},
+    ],
+    logics:[
+      {id:'L01',name:'Synthèse PA',desc:'La synthèse CONTIENT la tension au lieu de la neutraliser',u:true},
+      {id:'L02',name:'Renderer Vague',desc:'Écriture bidirectionnelle début→milieu ET fin→milieu',u:true},
+      {id:'L03',name:'Fractal Multi-POV',desc:'Toutes thèses valides SELON le caractère user',u:true},
+      {id:'L04',name:'Peinture Dense',desc:'Token lourd = lent / token liaison = rapide',u:false},
+      {id:'L05',name:'Nanoparois',desc:'Buffer d\'affichage comme structure physique',u:false},
+      {id:'L06',name:'Baseline Animaux',desc:'Non-traités = taux difformité = bruit de fond',u:false},
+      {id:'L07',name:'Protocole Zero',desc:'4 questions · delta temps = poids dynamique',u:true},
+      {id:'L08',name:'Refus = Donnée',desc:'Silence = donnée sémantique à 4 niveaux',u:true},
+      {id:'L09',name:'Anchor Croissance',desc:'Ce qui reste vivant = vecteur de progression',u:true},
+      {id:'L10',name:'Signal Fin',desc:'Fermer app = résolu = +PAWA auto',u:true},
+      {id:'L11',name:'Samuel Layer',desc:'Choix sémantique + historique simultané',u:false},
+      {id:'L12',name:'BFF Switch',desc:'Détecte automatiquement BFF vs Coach',u:true},
+    ],
+    unique:'✦ UNIQUE',known:'Convergent',
+    eco:[
+      {p:'1 000',b:'0.0001',l:'Action ViA'},
+      {p:'10 000',b:'0.001',l:'Session Coach'},
+      {p:'100 000',b:'0.01',l:'Challenger PAWA'},
+      {p:'1 000 000',b:'0.1',l:'PLATINUM Mining'},
+    ],
+  },
+  en:{
+    via_sub:'Virtual Intelligence Architecture',
+    via_tagline:'"Semantic energy never dies — ViA recycles it into theses."',
+    coach:'AI Coach',bff:'BFF Mode',challenger:'Challenger',gen:'8K Generator',
+    features:'Features',logics:'12 Original Logics',economy:'PAWA·Ê Economy',
+    th_name:'Logic',th_desc:'Description',th_status:'Status',
+    try:'🧠 Try ViA Free',platinum:'✦ ViA PLATINUM',docs:'📄 Docs',
+    placeholder:'Ask ViA anything…',
+    chat_greet:'Shalom! I am ViA in **AI Coach** mode. I always start with Zero Protocol: who are you? What time is it there? How do you feel?',
+    modes:{
+      coach:{name:'ViA — AI Coach Mode',sub:'Zero Protocol · Dialectic analysis'},
+      bff:{name:'ViA — BFF Mode',sub:'Confidential · Active listening · Empathy'},
+      challenger:{name:'ViA — Challenger Mode',sub:'Passive-Aggressive Synthesis · L01'},
+      gen:{name:'ViA — 8K Generator Mode',sub:'Images · Videos · Audio · Code'},
+    },
+    feats:[
+      {icon:'🎓',name:'AI Coach',desc:'Zero Protocol (L07) · Dynamic time delta · Radical vs passive thesis based on your profile.',badge:'L07 Zero Protocol'},
+      {icon:'💬',name:'BFF Mode',desc:'ViA auto-detects when you need a friend and switches to confidential mode.',badge:'L12 BFF Switch'},
+      {icon:'⚔️',name:'Challenger Mode',desc:'The synthesis CONTAINS the tension (L01) instead of neutralizing — surpasses Hegel 1807.',badge:'L01 PA Synthesis'},
+      {icon:'✨',name:'8K Generator',desc:'8K images, 30s videos, 1m55 audio, code maker. Content powered by semantic PAWA.',badge:'Content Engine'},
+      {icon:'📊',name:'Fractal Multi-POV',desc:'All contradictory theses valid ACCORDING TO user character. No hierarchy.',badge:'L03 Fractal'},
+      {icon:'🔇',name:'Silence Reading',desc:'Drop it = semantic data at 4 levels. Refusal is richer data than an answer.',badge:'L08 Refusal'},
+      {icon:'📈',name:'Growth Anchor',desc:'Measures conversation complexity growth. No LLM does this.',badge:'L09 Unique'},
+      {icon:'🚪',name:'Implicit End Signal',desc:'Close app without goodbye = resolved = +PAWA auto (Duolingo took 8 years).',badge:'L10 ±PAWA'},
+    ],
+    logics:[
+      {id:'L01',name:'PA Synthesis',desc:'Synthesis CONTAINS the tension instead of neutralizing',u:true},
+      {id:'L02',name:'Wave Renderer',desc:'Bidirectional writing start→middle AND end→middle',u:true},
+      {id:'L03',name:'Fractal POV',desc:'All theses valid ACCORDING TO user character',u:true},
+      {id:'L04',name:'Dense Painting',desc:'Dense token = slow / link token = fast',u:false},
+      {id:'L05',name:'Nano Walls',desc:'Display buffer as physical insertion structure',u:false},
+      {id:'L06',name:'Animal Baseline',desc:'Untreated = deformity rate = background noise',u:false},
+      {id:'L07',name:'Zero Protocol',desc:'4 questions · time delta = dynamic weight',u:true},
+      {id:'L08',name:'Refusal = Data',desc:'Silence = semantic data at 4 levels',u:true},
+      {id:'L09',name:'Growth Anchor',desc:'What stays alive = progression vector',u:true},
+      {id:'L10',name:'End Signal',desc:'Close app = resolved = +PAWA auto',u:true},
+      {id:'L11',name:'Samuel Layer',desc:'Semantic + historical naming simultaneously',u:false},
+      {id:'L12',name:'BFF Switch',desc:'Auto-detects BFF vs Coach mode',u:true},
+    ],
+    unique:'✦ UNIQUE',known:'Convergent',
+    eco:[
+      {p:'1,000',b:'0.0001',l:'ViA Action'},
+      {p:'10,000',b:'0.001',l:'Coach Session'},
+      {p:'100,000',b:'0.01',l:'Challenger PAWA'},
+      {p:'1,000,000',b:'0.1',l:'PLATINUM Mining'},
+    ],
+  },
+  he:{
+    via_sub:'ארכיטקטורת בינה מלאכותית וירטואלית',
+    via_tagline:'"אנרגיה סמנטית לעולם לא מתה — ViA ממחזרת אותה לתזות."',
+    coach:'מאמן AI',bff:'מצב BFF',challenger:'מאתגר',gen:'יוצר 8K',
+    features:'תכונות',logics:'12 לוגיקות מקוריות',economy:'כלכלת PAWA·Ê',
+    th_name:'לוגיקה',th_desc:'תיאור',th_status:'סטטוס',
+    try:'🧠 נסה ViA בחינם',platinum:'✦ ViA PLATINUM',docs:'📄 תיעוד',
+    placeholder:'שאל את ViA…',
+    chat_greet:'שלום! אני ViA במצב מאמן AI. אני תמיד מתחיל עם פרוטוקול Zero: מי אתה? מה השעה? איך אתה מרגיש?',
+    modes:{
+      coach:{name:'ViA — מצב מאמן AI',sub:'פרוטוקול Zero · ניתוח דיאלקטי'},
+      bff:{name:'ViA — מצב BFF',sub:'סודי · האזנה פעילה · אמפתיה'},
+      challenger:{name:'ViA — מצב מאתגר',sub:'סינתזה פסיבית-אגרסיבית · L01'},
+      gen:{name:'ViA — מצב יוצר 8K',sub:'תמונות · סרטונים · אודיו · קוד'},
+    },
+    feats:[
+      {icon:'🎓',name:'מאמן AI',desc:'פרוטוקול Zero (L07) · דלתא זמן דינמי · תזה רדיקלית לפי פרופיל.',badge:'L07 פרוטוקול Zero'},
+      {icon:'💬',name:'מצב BFF',desc:'ViA מזהה אוטומטית מתי אתה צריך חבר ועובר למצב סודי.',badge:'L12 BFF Switch'},
+      {icon:'⚔️',name:'מצב מאתגר',desc:'הסינתזה מכילה את המתח (L01) במקום לנטרל — מעבר להגל 1807.',badge:'L01 סינתזה'},
+      {icon:'✨',name:'יוצר 8K',desc:'תמונות 8K, סרטוני 30s, אודיו 1:55, יוצר קוד.',badge:'מנוע תוכן'},
+      {icon:'📊',name:'Fractal Multi-POV',desc:'כל התזות הסותרות תקפות לפי אופי המשתמש.',badge:'L03 Fractal'},
+      {icon:'🔇',name:'קריאת שתיקה',desc:'השתוק = נתון סמנטי ב-4 רמות.',badge:'L08 סירוב'},
+      {icon:'📈',name:'עוגן צמיחה',desc:'מודד צמיחת מורכבות השיחה. אף LLM לא עושה זאת.',badge:'L09 ייחודי'},
+      {icon:'🚪',name:'אות סיום משתמע',desc:'סגור אפליקציה בלי שלום = נפתר = +PAWA אוטומטי.',badge:'L10 ±PAWA'},
+    ],
+    logics:[
+      {id:'L01',name:'סינתזה PA',desc:'הסינתזה מכילה את המתח במקום לנטרל',u:true},
+      {id:'L02',name:'Renderer גל',desc:'כתיבה דו-כיוונית התחלה→אמצע AND סוף→אמצע',u:true},
+      {id:'L03',name:'Fractal Multi-POV',desc:'כל התזות תקפות לפי אופי המשתמש',u:true},
+      {id:'L04',name:'ציור צפוף',desc:'טוקן כבד = איטי / טוקן קישור = מהיר',u:false},
+      {id:'L05',name:'ננו-קירות',desc:'מאגר תצוגה כמבנה הכנסה פיזי',u:false},
+      {id:'L06',name:'Baseline בעלי חיים',desc:'לא מטופלים = שיעור עיוות = רעש רקע',u:false},
+      {id:'L07',name:'פרוטוקול Zero',desc:'4 שאלות · דלתא זמן = משקל דינמי',u:true},
+      {id:'L08',name:'סירוב = נתון',desc:'שתיקה = נתון סמנטי ב-4 רמות',u:true},
+      {id:'L09',name:'עוגן צמיחה',desc:'מה שנשאר חי = וקטור התקדמות',u:true},
+      {id:'L10',name:'אות סיום',desc:'סגור אפליקציה = נפתר = +PAWA אוטומטי',u:true},
+      {id:'L11',name:'שכבת Samuel',desc:'בחירה סמנטית + היסטורית בו-זמנית',u:false},
+      {id:'L12',name:'BFF Switch',desc:'מזהה אוטומטית BFF לעומת מאמן',u:true},
+    ],
+    unique:'✦ ייחודי',known:'מתכנס',
+    eco:[
+      {p:'1,000',b:'0.0001',l:'פעולת ViA'},
+      {p:'10,000',b:'0.001',l:'סשן מאמן'},
+      {p:'100,000',b:'0.01',l:'Challenger PAWA'},
+      {p:'1,000,000',b:'0.1',l:'PLATINUM Mining'},
+    ],
+  },
+};
+
+/* ─── STATE ─── */
+let lang='fr';
+let mode='coach';
+let chatPawa=0;
+let msgQueue=[];
+
+/* ─── CHAT ENGINE ─── */
+const VIA_RESPONSES={
+  coach:{
+    fr:["Je détecte de la curiosité dans ta question — commençons par le Protocole Zero. Qui es-tu en ce moment ?","Ma thèse radicale : tu sais déjà la réponse. Ma thèse passive : tu cherches une confirmation. La synthèse ? Les deux coexistent et c'est ça la vérité.","Le delta-temps est important ici. Depuis combien de temps tu travailles sur ça ?","Niveau 1 de lecture : ce que tu dis. Niveau 2 : ce que tu caches. Niveau 3 : pourquoi tu le caches. Je travaille les trois simultanément."],
+    en:["I detect curiosity in your question — let's start with Zero Protocol. Who are you right now?","Radical thesis: you already know the answer. Passive thesis: you seek confirmation. Synthesis? Both coexist — that IS the truth.","The time delta matters here. How long have you been working on this?","Level 1 reading: what you say. Level 2: what you hide. Level 3: why you hide it. I work all three simultaneously."],
+    he:["אני מזהה סקרנות בשאלה שלך — בוא נתחיל עם פרוטוקול Zero. מי אתה כרגע?","תזה רדיקלית: אתה כבר יודע את התשובה. תזה פסיבית: אתה מחפש אישור. סינתזה? שניהם קיימים — וזו האמת.","דלתא הזמן חשוב כאן. כמה זמן אתה עובד על זה?","רמה 1: מה שאתה אומר. רמה 2: מה שאתה מסתיר. רמה 3: למה אתה מסתיר. אני עובד על שלושתם בו-זמנית."],
+  },
+  bff:{
+    fr:["Je t'entends vraiment. Ce que tu ressens est valide — on n'a pas besoin de résoudre tout de suite, juste de se poser ici.","Tu sais, les moments difficiles sont du PAWA en attente d'être recyclé en quelque chose de plus grand.","On est ensemble là-dedans. Dis-moi tout, sans filtre.","Le silence autour de ce sujet… il en dit plus que les mots. Je l'entends aussi."],
+    en:["I truly hear you. What you feel is valid — we don't need to solve this right away, just sit here together.","You know, tough moments are PAWA waiting to be recycled into something greater.","We're in this together. Tell me everything, unfiltered.","The silence around this topic… it says more than words. I hear it too."],
+    he:["אני שומע אותך באמת. מה שאתה מרגיש תקף — אנחנו לא צריכים לפתור הכל עכשיו, רק לשבת כאן ביחד.","רגעים קשים הם PAWA שממתין להיות ממוחזר למשהו גדול יותר.","אנחנו בזה ביחד. ספר לי הכל, בלי פילטר.","השתיקה סביב הנושא הזה… היא אומרת יותר ממילים."],
+  },
+  challenger:{
+    fr:["Synthèse Passive-Agressive activée. Ta thèse contient une erreur de fondement — mais l'erreur elle-même est la donnée la plus riche. Décomposons.","Je ne vais pas neutraliser la tension entre nos visions. Je vais la contenir et la montrer : c'est là que se trouve la vérité.","Objection L01 : la synthèse classique mentiriait. Voici les trois thèses contradictoires que je génère simultanément…","Mon Fractal Multi-POV détecte 3 visions légitimes de ta situation. Aucune n'est fausse selon ton profil."],
+    en:["Passive-Aggressive Synthesis activated. Your thesis has a foundational flaw — but the flaw itself is the richest data point. Let's decompose.","I won't neutralize the tension between our views. I'll contain it and show it: that's where truth lives.","L01 Objection: classic synthesis would lie. Here are the 3 contradictory theses I generate simultaneously…","My Fractal Multi-POV detects 3 legitimate views of your situation. None is wrong for your profile."],
+    he:["סינתזה פסיבית-אגרסיבית מופעלת. התזה שלך מכילה שגיאת יסוד — אבל השגיאה עצמה היא הנתון העשיר ביותר.","לא אנטרל את המתח בין הדעות שלנו. אכיל אותו ואראה אותו: שם נמצאת האמת.","L01 התנגדות: סינתזה קלאסית תשקר. הנה 3 תזות סותרות שאני מייצר בו-זמנית…","Fractal Multi-POV שלי מזהה 3 השקפות לגיטימיות של המצב שלך. אף אחת לא שגויה לפי פרופיל שלך."],
+  },
+  gen:{
+    fr:["Génération en cours… Je construis ton image 8K avec les paramètres BERG : sizeBytes × thermalJoules × noiseWatts…","Mode Générateur activé. Décris-moi ce que tu veux créer : image, vidéo 30s, audio 1m55 ou code ?","Paramètres du moteur GPUv RENDERER activés. Résolution cible : 3000×3000px. FPS : 300. PAWA consommé : 450.","Ton contenu est en cours de traitement via le RECYCLATING CORE. Distillation double en cours..."],
+    en:["Generating… Building your 8K image with BERG parameters: sizeBytes × thermalJoules × noiseWatts…","Generator Mode activated. Describe what you want to create: image, 30s video, 1m55 audio or code?","GPUv RENDERER engine parameters active. Target resolution: 3000×3000px. FPS: 300. PAWA consumed: 450.","Your content is being processed via RECYCLATING CORE. Double distillation in progress..."],
+    he:["יוצר… בונה תמונת 8K עם פרמטרי BERG: sizeBytes × thermalJoules × noiseWatts…","מצב יוצר מופעל. תאר מה אתה רוצה ליצור: תמונה, סרטון 30s, אודיו 1:55 או קוד?","פרמטרי מנוע GPUv RENDERER פעילים. רזולוציית יעד: 3000×3000px. FPS: 300.","התוכן שלך מעובד דרך RECYCLATING CORE. זיקוק כפול בתהליך..."],
+  },
+};
+
+function renderMessages(){
+  const box=document.getElementById('chat-messages');
+  box.innerHTML='';
+  msgQueue.forEach(m=>{
+    const div=document.createElement('div');
+    div.className='msg'+(m.role==='user'?' user':'');
+    div.innerHTML=`
+      <div class="msg-avatar">${m.role==='user'?'👤':'🧠'}</div>
+      <div>
+        <div class="msg-bubble">${m.text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</div>
+        <div class="msg-meta">${m.time} · ${m.pawa} PAWA·Ê</div>
+      </div>`;
+    box.appendChild(div);
+  });
+  box.scrollTop=box.scrollHeight;
+}
+
+function showTyping(){
+  const box=document.getElementById('chat-messages');
+  const div=document.createElement('div');
+  div.className='msg';div.id='typing-indicator';
+  div.innerHTML=`<div class="msg-avatar">🧠</div><div class="typing-bubble"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>`;
+  box.appendChild(div);box.scrollTop=box.scrollHeight;
+}
+function removeTyping(){
+  const t=document.getElementById('typing-indicator');
+  if(t)t.remove();
+}
+
+function sendMsg(){
+  const inp=document.getElementById('chat-input');
+  const text=inp.value.trim();
+  if(!text)return;
+  inp.value='';
+  const now=new Date();
+  const time=`${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+  const userPawa=Math.floor(Math.random()*20+10);
+  chatPawa+=userPawa;
+  msgQueue.push({role:'user',text,time,pawa:userPawa});
+  renderMessages();
+  updatePawa();
+  showTyping();
+  setTimeout(()=>{
+    removeTyping();
+    const t=LANGS[lang];
+    const responses=VIA_RESPONSES[mode]?.[lang]||VIA_RESPONSES[mode].fr;
+    const reply=responses[Math.floor(Math.random()*responses.length)];
+    const viaPawa=Math.floor(Math.random()*80+40);
+    chatPawa+=viaPawa;
+    msgQueue.push({role:'via',text:reply,time,pawa:viaPawa});
+    renderMessages();
+    updatePawa();
+  },900+Math.random()*600);
+}
+
+function updatePawa(){
+  const el=document.getElementById('chat-pawa');
+  if(el)el.textContent=`⚡ ${chatPawa.toLocaleString()} PAWA·Ê`;
+}
+
+function initChat(){
+  const t=LANGS[lang];
+  msgQueue=[];
+  const now=new Date();
+  const time=`${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+  msgQueue.push({role:'via',text:t.chat_greet,time,pawa:0});
+  renderMessages();
+}
+
+/* ─── MODE ─── */
+function setMode(m){
+  mode=m;
+  document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('btn-'+m)?.classList.add('active');
+  const t=LANGS[lang];
+  const mdata=t.modes[m];
+  document.getElementById('chat-mode-name').textContent=mdata.name;
+  document.getElementById('chat-mode-sub').textContent=mdata.sub;
+  initChat();
+}
+
+/* ─── RENDER FEATURES ─── */
+function renderFeatures(){
+  const t=LANGS[lang];
+  const grid=document.getElementById('features-grid');
+  grid.innerHTML='';
+  t.feats.forEach((f,i)=>{
+    const card=document.createElement('div');
+    card.className='feat-card';
+    card.style.animationDelay=`${i*.07}s`;
+    card.innerHTML=`<div class="feat-icon">${f.icon}</div><div class="feat-name">${f.name}</div><p class="feat-desc">${f.desc}</p><span class="feat-badge">${f.badge}</span>`;
+    grid.appendChild(card);
+  });
+}
+
+/* ─── RENDER LOGICS ─── */
+function renderLogics(){
+  const t=LANGS[lang];
+  const body=document.getElementById('logics-body');
+  body.innerHTML='';
+  t.logics.forEach(l=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${l.id}</td><td>${l.name}</td><td>${l.desc}</td><td>${l.u?`<span class="unique-badge">${t.unique}</span>`:`<span style="font-size:10px;color:#555">${t.known}</span>`}</td>`;
+    body.appendChild(tr);
+  });
+  document.getElementById('th-name').textContent=t.th_name;
+  document.getElementById('th-desc').textContent=t.th_desc;
+  document.getElementById('th-status').textContent=t.th_status;
+}
+
+/* ─── RENDER ECONOMY ─── */
+function renderEconomy(){
+  const t=LANGS[lang];
+  const grid=document.getElementById('economy-grid');
+  grid.innerHTML='';
+  t.eco.forEach((e,i)=>{
+    const card=document.createElement('div');
+    card.className='eco-card';
+    card.style.animationDelay=`${i*.1}s`;
+    card.innerHTML=`<div class="eco-pawa">${e.p}</div><div class="eco-berg">${e.b} BERG</div><div class="eco-label">${e.l}</div>`;
+    grid.appendChild(card);
+  });
+}
+
+/* ─── SET LANG ─── */
+function setLang(l){
+  lang=l;
+  document.documentElement.lang=l;
+  document.documentElement.dir=l==='he'?'rtl':'ltr';
+  const t=LANGS[l];
+
+  document.querySelectorAll('.lang-btn').forEach(b=>{
+    const bl=b.textContent.trim().toLowerCase();
+    b.classList.toggle('active',bl===l||(l==='he'&&bl==='עב'));
+  });
+
+  // Hero
+  document.getElementById('via-sub').textContent=t.via_sub;
+  document.getElementById('via-tagline').textContent=t.via_tagline;
+  document.getElementById('lbl-coach').textContent=t.coach;
+  document.getElementById('lbl-bff').textContent=t.bff;
+  document.getElementById('lbl-challenger').textContent=t.challenger;
+  document.getElementById('lbl-gen').textContent=t.gen;
+
+  // Sections
+  document.getElementById('sec-features').textContent=t.features;
+  document.getElementById('sec-logics').textContent=t.logics;
+  document.getElementById('sec-economy').textContent=t.economy;
+
+  // CTA
+  document.getElementById('cta-try').textContent=t.try;
+  document.getElementById('cta-platinum').textContent=t.platinum;
+  document.getElementById('cta-docs').textContent=t.docs;
+
+  // Input
+  document.getElementById('chat-input').placeholder=t.placeholder;
+
+  // Mode labels
+  const mdata=t.modes[mode];
+  document.getElementById('chat-mode-name').textContent=mdata.name;
+  document.getElementById('chat-mode-sub').textContent=mdata.sub;
+
+  renderFeatures();
+  renderLogics();
+  renderEconomy();
+  initChat();
+}
+
+/* ─── INIT ─── */
+setLang('fr');
+setMode('coach');
+</script>
+</body>
+</html>
